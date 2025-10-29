@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "498950184557",
+    "project_id": "whopaid-5a40a",
+    "storage_bucket": "whopaid-5a40a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:498950184557:android:3850b645b9e78027de2964",
+        "android_client_info": {
+          "package_name": "com.example.whopaid"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_QXbGOY5IICPWXCCS6SHB2pg5nr1_e0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
