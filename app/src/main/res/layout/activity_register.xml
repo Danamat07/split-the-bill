@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Page title -->
+        <TextView
+            android:text="@string/create_account"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- Name input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etName"
+                android:hint="@string/full_name"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:importantForAutofill="yes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Email input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEmail"
+                android:hint="@string/email_address"
+                android:inputType="textEmailAddress"
+                android:minHeight="48dp"
+                android:importantForAutofill="yes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Phone number input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPhone"
+                android:hint="@string/phone_number"
+                android:inputType="phone"
+                android:minHeight="48dp"
+                android:importantForAutofill="yes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Password input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPassword"
+                android:hint="@string/create_password"
+                android:inputType="textPassword"
+                android:minHeight="48dp"
+                android:importantForAutofill="yes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Confirm password input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etConfirmPassword"
+                android:hint="@string/confirm_password"
+                android:inputType="textPassword"
+                android:minHeight="48dp"
+                android:importantForAutofill="yes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Register button -->
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:text="@string/register"
+            android:textAllCaps="false" />
+
+        <!-- Progress bar (hidden by default) -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- Link to go back to login -->
+        <TextView
+            android:id="@+id/tvHaveAccount"
+            android:text="@string/already_have_account"
+            android:textColor="?attr/colorPrimary"
+            android:layout_marginTop="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</ScrollView>

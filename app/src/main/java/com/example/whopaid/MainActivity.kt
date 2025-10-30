@@ -1,47 +1,40 @@
 package com.example.whopaid
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.whopaid.ui.theme.WhoPaidTheme
+import androidx.appcompat.app.AppCompatActivity
+import com.example.whopaid.databinding.ActivityMainBinding
+import com.example.whopaid.ui.auth.LoginActivity
 
-class MainActivity : ComponentActivity() {
+/**
+ * Main screen shown after successful login or registration.
+ * Displays user info and allows logout.
+ */
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+    private val repo = AuthRepository()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            WhoPaidTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // Get current Firebase user
+        val current = repo.currentUser()
+
+        // Display user's email
+        binding.tvWelcome.text = if (current != null) {
+            "Welcome, ${current.email}"
+        } else {
+            "Welcome!"
         }
-    }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    WhoPaidTheme {
-        Greeting("Android")
+        // Logout button handler
+        binding.btnLogout.setOnClickListener {
+            repo.logout()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
     }
 }

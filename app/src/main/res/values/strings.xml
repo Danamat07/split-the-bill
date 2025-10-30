@@ -1,3 +1,25 @@
 <resources>
+    <!-- App name -->
     <string name="app_name">WhoPaid</string>
+
+    <!-- Common actions -->
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+
+    <!-- Registration screen -->
+    <string name="create_account">Create Account</string>
+    <string name="full_name">Full name</string>
+    <string name="email_address">Email address</string>
+    <string name="phone_number">Phone number</string>
+    <string name="create_password">Create Password</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="already_have_account">Already have an account? Login</string>
+
+    <!-- Login screen -->
+    <string name="dont_have_account">Dont have an account? Register</string>
+
+    <!-- Main screen -->
+    <string name="welcome">Welcome!</string>
 </resources>
