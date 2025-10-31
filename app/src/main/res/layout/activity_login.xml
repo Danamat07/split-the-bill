@@ -9,13 +9,15 @@
     android:padding="24dp"
     android:gravity="center_horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background">
 
     <!-- Page title -->
     <TextView
         android:text="@string/login"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:textColor="#2D1B3D"
         android:layout_marginBottom="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -46,13 +48,17 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Login button -->
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnLogin"
         android:layout_marginTop="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/login"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/button_background"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp" />
 
     <!-- Progress bar (hidden by default) -->
     <ProgressBar
@@ -67,7 +73,7 @@
     <TextView
         android:id="@+id/tvRegister"
         android:text="@string/dont_have_account"
-        android:textColor="?attr/colorPrimary"
+        android:textColor="#2D1B3D"
         android:layout_marginTop="12dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
