@@ -9,23 +9,31 @@
     android:gravity="center"
     android:padding="24dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background">
 
     <!-- Welcome text -->
     <TextView
         android:id="@+id/tvWelcome"
-        android:text="Welcome!"
+        android:text="@string/welcome"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:textColor="#2D1B3D"
         android:layout_marginBottom="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <!-- Logout button -->
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnLogout"
-        android:text="Login"
+        android:text="@string/login"
         android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/button_background"
+        android:paddingStart="48dp"
+        android:paddingEnd="48dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </LinearLayout>
