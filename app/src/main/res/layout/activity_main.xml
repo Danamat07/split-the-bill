@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Main screen layout.
-    Shown after successful login/registration.
-    Displays a welcome message and a logout button.
+    Landing screen layout (MainActivity)
+    Displays the app name, welcome message,
+    and two main actions: Login and Register.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
@@ -12,21 +12,46 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background">
 
-    <!-- Welcome text -->
+    <!-- App title -->
     <TextView
-        android:id="@+id/tvWelcome"
-        android:text="@string/welcome"
-        android:textSize="20sp"
+        android:id="@+id/tvAppTitle"
+        android:text="@string/app_name"
+        android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="#2D1B3D"
+        android:layout_marginBottom="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!-- Welcome message -->
+    <TextView
+        android:id="@+id/tvWelcome"
+        android:text="Welcome! Please choose an option below:"
+        android:textSize="16sp"
+        android:textColor="#4A4A4A"
+        android:layout_marginBottom="32dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!-- Login button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnLogin"
+        android:text="@string/login"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/button_background"
+        android:paddingStart="48dp"
+        android:paddingEnd="48dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
         android:layout_marginBottom="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <!-- Logout button -->
+    <!-- Register button -->
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnLogout"
-        android:text="@string/login"
+        android:id="@+id/btnRegister"
+        android:text="@string/create_account"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
         android:background="@drawable/button_background"

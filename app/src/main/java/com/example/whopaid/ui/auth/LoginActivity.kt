@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 
 /**
  * Screen for user login.
+ * Handles input validation and Firebase Authentication.
  */
 class LoginActivity : AppCompatActivity() {
 
@@ -63,11 +64,29 @@ class LoginActivity : AppCompatActivity() {
     }
 
     /**
-     * Validates email and password fields.
+     * Validates email and password fields with clear error messages.
      */
     private fun validate(email: String, password: String): Boolean {
-        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) { binding.etEmail.error = "Invalid email"; return false }
-        if (password.length < 6) { binding.etPassword.error = "Password must be at least 6 characters"; return false }
-        return true
+        var isValid = true
+
+        // Email validation
+        if (email.isEmpty()) {
+            binding.etEmail.error = "Please enter your email"
+            isValid = false
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.etEmail.error = "Invalid email format"
+            isValid = false
+        }
+
+        // Password validation
+        if (password.isEmpty()) {
+            binding.etPassword.error = "Please enter your password"
+            isValid = false
+        } else if (password.length < 6) {
+            binding.etPassword.error = "Password must be at least 6 characters"
+            isValid = false
+        }
+
+        return isValid
     }
 }

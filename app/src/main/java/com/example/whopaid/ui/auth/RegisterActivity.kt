@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 
 /**
  * Screen for user registration.
+ * Handles validation and Firebase signup.
  */
 class RegisterActivity : AppCompatActivity() {
 
@@ -61,14 +62,54 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     /**
-     * Validates user input fields.
+     * Validates all user input fields.
+     * Displays error messages on invalid fields.
      */
     private fun validate(name: String, email: String, phone: String, password: String, confirm: String): Boolean {
-        if (name.isEmpty()) { binding.etName.error = "Enter your name"; return false }
-        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) { binding.etEmail.error = "Invalid email"; return false }
-        if (phone.isEmpty()) { binding.etPhone.error = "Enter phone number"; return false }
-        if (password.length < 6) { binding.etPassword.error = "Password must be at least 6 characters"; return false }
-        if (password != confirm) { binding.etConfirmPassword.error = "Passwords do not match"; return false }
-        return true
+        var isValid = true
+
+        // Validate name
+        if (name.isEmpty()) {
+            binding.etName.error = "Please enter your name"
+            isValid = false
+        }
+
+        // Validate email
+        if (email.isEmpty()) {
+            binding.etEmail.error = "Please enter your email"
+            isValid = false
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.etEmail.error = "Invalid email format"
+            isValid = false
+        }
+
+        // Validate phone number (digits only, exactly 10 numbers)
+        if (phone.isEmpty()) {
+            binding.etPhone.error = "Please enter your phone number"
+            isValid = false
+        } else if (!phone.matches(Regex("^[0-9]{10}$"))) {
+            binding.etPhone.error = "Phone number must contain exactly 10 digits"
+            isValid = false
+        }
+
+        // Validate password
+        if (password.isEmpty()) {
+            binding.etPassword.error = "Please enter a password"
+            isValid = false
+        } else if (password.length < 6) {
+            binding.etPassword.error = "Password must be at least 6 characters"
+            isValid = false
+        }
+
+        // Validate confirm password
+        if (confirm.isEmpty()) {
+            binding.etConfirmPassword.error = "Please confirm your password"
+            isValid = false
+        } else if (password != confirm) {
+            binding.etConfirmPassword.error = "Passwords do not match"
+            isValid = false
+        }
+
+        return isValid
     }
 }
