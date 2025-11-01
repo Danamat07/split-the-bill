@@ -46,7 +46,7 @@ class RegisterActivity : AppCompatActivity() {
                 binding.progressBar.visibility = View.GONE
                 if (result.isSuccess) {
                     Toast.makeText(this@RegisterActivity, "Account created successfully!", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this@RegisterActivity, MainActivity::class.java))
+                    startActivity(Intent(this@RegisterActivity, com.example.whopaid.ui.groups.GroupsActivity::class.java))
                     finish()
                 } else {
                     Toast.makeText(this@RegisterActivity, "Error: ${result.exceptionOrNull()?.message}", Toast.LENGTH_LONG).show()

@@ -1,16 +1,20 @@
 package com.example.whopaid.models
 
 /**
- * Simple data model representing a group stored in Firestore.
+ * Firestore representation of a Group.
  *
- * - id: document id (also stored in the doc as convenience)
- * - name: group display name
- * - ownerUid: UID of user who created the group
- * - members: list of user UIDs who joined the group
+ * - id: document id for the group (same as Firestore doc id)
+ * - name: human readable group name
+ * - description: optional
+ * - adminUid: uid of the user who is the admin/creator
+ * - members: list of user UIDs that belong to this group
+ * - createdAt: timestamp in milliseconds
  */
 data class Group(
     val id: String = "",
     val name: String = "",
-    val ownerUid: String = "",
-    val members: List<String> = emptyList()
+    val description: String = "",
+    val adminUid: String = "",
+    val members: List<String> = emptyList(),
+    val createdAt: Long = 0L
 )

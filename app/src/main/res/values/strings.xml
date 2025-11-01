@@ -22,4 +22,7 @@
 
     <!-- Main screen -->
     <string name="welcome">Welcome!</string>
+
+    <string name="create_group">Create group</string>
+    <string name="no_groups">You are not a member of any groups</string>
 </resources>
