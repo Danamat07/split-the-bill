@@ -26,7 +26,7 @@
     <!-- Welcome message -->
     <TextView
         android:id="@+id/tvWelcome"
-        android:text="Welcome! Please choose an option below:"
+        android:text="@string/welcome_please_choose_an_option_below"
         android:textSize="16sp"
         android:textColor="#4A4A4A"
         android:layout_marginBottom="32dp"

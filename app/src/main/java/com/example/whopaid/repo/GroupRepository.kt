@@ -131,4 +131,21 @@ class GroupRepository {
             Result.failure(e)
         }
     }
+
+    /**
+     * Removes a member from a group (admin-only operation).
+     * Steps:
+     * 1. Remove memberUid from group's members array
+     * 2. Remove groupId from user's groups array
+     */
+    suspend fun removeMember(groupId: String, memberUid: String): Result<Unit> {
+        return try {
+            groupsCol.document(groupId).update("members", FieldValue.arrayRemove(memberUid)).await()
+            usersCol.document(memberUid).update("groups", FieldValue.arrayRemove(groupId)).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 }

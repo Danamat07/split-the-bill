@@ -23,6 +23,15 @@
     <!-- Main screen -->
     <string name="welcome">Welcome!</string>
 
+    <!-- Group actions -->
     <string name="create_group">Create group</string>
     <string name="no_groups">You are not a member of any groups</string>
+    <string name="user_email">User email</string>
+    <string name="welcome_please_choose_an_option_below">Welcome! Please choose an option below:</string>
+    <string name="members">Members:</string>
+    <string name="add_member_admin_only">Add member (admin only)</string>
+    <string name="leave_group">Leave group</string>
+    <string name="delete_group_admin_only">Delete group (admin only)</string>
+    <string name="group_name">Group name</string>
+    <string name="description_optional">Description (optional)</string>
 </resources>
