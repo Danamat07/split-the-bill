@@ -20,6 +20,11 @@
         <!-- Login screen -->
         <activity android:name="com.example.whopaid.ui.auth.LoginActivity" />
 
+        <activity android:name="com.example.whopaid.ui.groups.GroupsActivity" />
+        <activity android:name="com.example.whopaid.ui.groups.CreateGroupActivity" />
+        <activity android:name="com.example.whopaid.ui.groups.GroupDetailsActivity" />
+
+
         <!-- Main screen (entry point) -->
         <activity
             android:name=".MainActivity"

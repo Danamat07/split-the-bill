@@ -27,12 +27,12 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // If user is already logged in, skip login screen
-        if (repo.currentUser() != null) {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-            return
-        }
+//        // If user is already logged in, skip login screen
+//        if (repo.currentUser() != null) {
+//            startActivity(Intent(this, MainActivity::class.java))
+//            finish()
+//            return
+//        }
 
         // Login button click handler
         binding.btnLogin.setOnClickListener {
@@ -48,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
                 binding.progressBar.visibility = View.GONE
                 if (result.isSuccess) {
                     Toast.makeText(this@LoginActivity, "Login successful!", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                    startActivity(Intent(this@LoginActivity, com.example.whopaid.ui.groups.GroupsActivity::class.java))
                     finish()
                 } else {
                     Toast.makeText(this@LoginActivity, "Error: ${result.exceptionOrNull()?.message}", Toast.LENGTH_LONG).show()
