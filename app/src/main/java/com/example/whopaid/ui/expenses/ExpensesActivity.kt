@@ -45,6 +45,13 @@ class ExpensesActivity : AppCompatActivity(), ExpenseAdapter.OnExpenseClickListe
             startActivity(intent)
         }
 
+        // 🔹 New button for DebtsActivity
+        binding.btnViewDebts.setOnClickListener {
+            val intent = Intent(this, DebtsActivity::class.java)
+            intent.putExtra("groupId", groupId)
+            startActivity(intent)
+        }
+
         loadExpenses()
     }
 
@@ -70,9 +77,6 @@ class ExpensesActivity : AppCompatActivity(), ExpenseAdapter.OnExpenseClickListe
         }
     }
 
-    /**
-     * When a user taps an expense → open edit screen.
-     */
     override fun onExpenseClick(expense: Expense) {
         val intent = Intent(this, CreateExpenseActivity::class.java)
         intent.putExtra("groupId", groupId)
@@ -80,9 +84,6 @@ class ExpensesActivity : AppCompatActivity(), ExpenseAdapter.OnExpenseClickListe
         startActivity(intent)
     }
 
-    /**
-     * When a user long-presses → ask to delete.
-     */
     override fun onExpenseLongClick(expense: Expense) {
         AlertDialog.Builder(this)
             .setTitle("Delete Expense")

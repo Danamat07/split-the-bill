@@ -27,6 +27,8 @@
         <activity android:name="com.example.whopaid.ui.expenses.ExpensesActivity" />
         <activity android:name="com.example.whopaid.ui.expenses.CreateExpenseActivity" />
 
+        <activity android:name="com.example.whopaid.ui.expenses.DebtsActivity" />
+
         <!-- Main screen (entry point) -->
         <activity
             android:name=".MainActivity"

@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Message shown when there are no expenses -->
         <TextView
             android:id="@+id/textEmpty"
             android:text="No expenses yet"
@@ -19,7 +18,6 @@
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
-        <!-- List of expenses -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
             android:paddingBottom="80dp"
@@ -27,16 +25,22 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <!-- Loading indicator -->
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone" />
+
+        <!-- 🔹 New button for Debts page -->
+        <Button
+            android:id="@+id/btnViewDebts"
+            android:text="View Debts"
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <!-- Floating Action Button to add a new expense -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddExpense"
         android:layout_width="56dp"
@@ -44,6 +48,5 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:src="@android:drawable/ic_input_add"
-        android:contentDescription="Add new expense"
-        android:importantForAccessibility="yes" />
+        android:contentDescription="Add new expense" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -41,4 +41,7 @@
     <string name="label_payer">Payer</string>
     <string name="select_participants">Select Participants</string>
     <string name="save_expense">Save Expense</string>
+
+    <string name="debt_to_person">To: %1$s</string>
+    <string name="debt_from_person">From: %1$s</string>
 </resources>
