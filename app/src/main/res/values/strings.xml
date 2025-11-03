@@ -34,4 +34,11 @@
     <string name="delete_group_admin_only">Delete group (admin only)</string>
     <string name="group_name">Group name</string>
     <string name="description_optional">Description (optional)</string>
+
+    <!-- Expense actions -->
+    <string name="expense_title">Expense Title</string>
+    <string name="expense_amount">Amount</string>
+    <string name="label_payer">Payer</string>
+    <string name="select_participants">Select Participants</string>
+    <string name="save_expense">Save Expense</string>
 </resources>
