@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- Group name -->
         <TextView
             android:id="@+id/tvGroupName"
             android:textSize="20sp"
@@ -18,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <!-- Group description -->
         <TextView
             android:id="@+id/tvDescription"
             android:layout_marginTop="8dp"
@@ -25,6 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <!-- Members label -->
         <TextView
             android:text="@string/members"
             android:layout_marginTop="16dp"
@@ -33,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <!-- Members list -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerMembers"
             android:layout_marginTop="4dp"
@@ -40,9 +44,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <!-- NEW: View Expenses button (visible for all members) -->
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnAddMember"
-            android:text="@string/add_member_admin_only"
+            android:id="@+id/btnViewExpenses"
+            android:text="View Expenses"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             android:background="@drawable/button_background"
@@ -52,6 +57,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <!-- Admin-only button: Add member -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnAddMember"
+            android:text="@string/add_member_admin_only"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/button_background"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Leave group (non-admin only) -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnLeaveGroup"
             android:text="@string/leave_group"
@@ -64,6 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <!-- Delete group (admin-only) -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnDeleteGroup"
             android:text="@string/delete_group_admin_only"
@@ -76,12 +96,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <!-- Loading indicator -->
         <ProgressBar
             android:id="@+id/progressBar"
             android:visibility="gone"
             android:layout_gravity="center"
             android:layout_marginTop="12dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </ScrollView>

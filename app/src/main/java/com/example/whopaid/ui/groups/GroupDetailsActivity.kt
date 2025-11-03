@@ -1,6 +1,7 @@
 package com.example.whopaid.ui.groups
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,11 +23,15 @@ import kotlinx.coroutines.launch
 /**
  * Details screen for a single group.
  * Shows group name, description and members (names resolved from Firestore).
+ *
  * Admin can:
  *  - Add members by email
  *  - Remove existing members
  *  - Delete the group
  * Non-admin members can leave the group.
+ *
+ * All members can:
+ *  - View and add expenses
  */
 class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClickListener {
 
@@ -55,9 +60,17 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
         binding.recyclerMembers.layoutManager = LinearLayoutManager(this)
         binding.recyclerMembers.adapter = adapter
 
+        // --- BUTTON HANDLERS ---
         binding.btnAddMember.setOnClickListener { showAddMemberDialog() }
         binding.btnDeleteGroup.setOnClickListener { confirmAndDelete() }
         binding.btnLeaveGroup.setOnClickListener { leaveGroup() }
+
+        // NEW: navigate to expenses screen
+        binding.btnViewExpenses.setOnClickListener {
+            val intent = Intent(this, com.example.whopaid.ui.expenses.ExpensesActivity::class.java)
+            intent.putExtra("groupId", groupId)
+            startActivity(intent)
+        }
 
         // Load group and listen for real-time updates
         db.collection("groups").document(groupId!!).addSnapshotListener { snapshot, error ->
@@ -75,6 +88,9 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
         }
     }
 
+    /**
+     * Renders group data (name, description, members).
+     */
     private fun renderGroup() {
         val group = currentGroup ?: return
         binding.tvGroupName.text = group.name
@@ -107,6 +123,9 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
             }
     }
 
+    /**
+     * Shows a dialog allowing the admin to add a member by email.
+     */
     private fun showAddMemberDialog() {
         val view = LayoutInflater.from(this).inflate(R.layout.dialog_add_member, null)
         val edit = view.findViewById<EditText>(R.id.etMemberEmail)
@@ -122,6 +141,9 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
             .show()
     }
 
+    /**
+     * Adds a new member (admin-only operation).
+     */
     private fun addMemberByEmail(email: String) {
         val gid = groupId ?: return
         binding.progressBar.visibility = View.VISIBLE
@@ -131,11 +153,18 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
             if (result.isSuccess) {
                 Toast.makeText(this@GroupDetailsActivity, "Member added", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this@GroupDetailsActivity, "Error: ${result.exceptionOrNull()?.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@GroupDetailsActivity,
+                    "Error: ${result.exceptionOrNull()?.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
 
+    /**
+     * Leaves the group (for non-admin members).
+     */
     private fun leaveGroup() {
         val gid = groupId ?: return
         val current = authRepo.currentUser() ?: return
@@ -144,14 +173,22 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
             val result = groupRepo.leaveGroup(gid, current.uid)
             binding.progressBar.visibility = View.GONE
             if (result.isSuccess) {
-                Toast.makeText(this@GroupDetailsActivity, "You left the group", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@GroupDetailsActivity, "You left the group", Toast.LENGTH_SHORT)
+                    .show()
                 finish()
             } else {
-                Toast.makeText(this@GroupDetailsActivity, "Error: ${result.exceptionOrNull()?.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@GroupDetailsActivity,
+                    "Error: ${result.exceptionOrNull()?.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
 
+    /**
+     * Confirms deletion of the group (admin-only).
+     */
     private fun confirmAndDelete() {
         AlertDialog.Builder(this)
             .setTitle("Delete group")
@@ -161,6 +198,9 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
             .show()
     }
 
+    /**
+     * Deletes the group completely (admin-only).
+     */
     private fun deleteGroup() {
         val gid = groupId ?: return
         binding.progressBar.visibility = View.VISIBLE
@@ -168,10 +208,15 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
             val result = groupRepo.deleteGroup(gid)
             binding.progressBar.visibility = View.GONE
             if (result.isSuccess) {
-                Toast.makeText(this@GroupDetailsActivity, "Group deleted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@GroupDetailsActivity, "Group deleted", Toast.LENGTH_SHORT)
+                    .show()
                 finish()
             } else {
-                Toast.makeText(this@GroupDetailsActivity, "Error: ${result.exceptionOrNull()?.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@GroupDetailsActivity,
+                    "Error: ${result.exceptionOrNull()?.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -194,6 +239,9 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
             .show()
     }
 
+    /**
+     * Removes a member from the group (admin-only).
+     */
     private fun removeMember(user: User) {
         val gid = groupId ?: return
         binding.progressBar.visibility = View.VISIBLE
@@ -201,9 +249,14 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
             val result = groupRepo.removeMember(gid, user.uid)
             binding.progressBar.visibility = View.GONE
             if (result.isSuccess) {
-                Toast.makeText(this@GroupDetailsActivity, "Member removed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@GroupDetailsActivity, "Member removed", Toast.LENGTH_SHORT)
+                    .show()
             } else {
-                Toast.makeText(this@GroupDetailsActivity, "Error: ${result.exceptionOrNull()?.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@GroupDetailsActivity,
+                    "Error: ${result.exceptionOrNull()?.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
