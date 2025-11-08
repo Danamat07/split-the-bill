@@ -6,8 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.whopaid.databinding.ItemBalanceBinding
 
 /**
- * Adapter for displaying detailed balances:
- * shows expense title, user name, currency, and converted RON equivalent.
+ * Adapter to display debts and credits with real-time Firestore sync.
+ * Each row:
+ *  - shows expense name
+ *  - displays amount + currency + RON equivalent
+ *  - supports checkbox for settlement (syncs via listener)
  */
 class BalanceAdapter(
     private val items: MutableList<BalanceActivity.BalanceItem>,
@@ -18,8 +21,6 @@ class BalanceAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: BalanceActivity.BalanceItem) {
-            // Example:
-            // "You owe John 45.00 EUR (≈ 223.50 RON) for Dinner"
             val label = if (item.type == "debt") {
                 "You owe ${item.name} %.2f %s (≈ %.2f RON)".format(
                     item.amountRaw, item.currencyCode, item.amountInGroupCurrency
@@ -31,6 +32,7 @@ class BalanceAdapter(
             }
             binding.tvName.text = label
             binding.tvExpense.text = "For: ${item.expenseTitle}"
+            binding.cbSettled.setOnCheckedChangeListener(null)
             binding.cbSettled.isChecked = item.settled
 
             binding.cbSettled.setOnCheckedChangeListener { _, isChecked ->
