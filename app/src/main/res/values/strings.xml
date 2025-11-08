@@ -41,4 +41,7 @@
     <string name="label_payer">Payer</string>
     <string name="select_participants">Select Participants</string>
     <string name="save_expense">Save Expense</string>
+    <string name="reset_all_admin">Reset All (Admin)</string>
+    <string name="hide_paid_settlements">Hide Paid Settlements</string>
+    <string name="no_balances_to_show">No balances to show</string>
 </resources>
