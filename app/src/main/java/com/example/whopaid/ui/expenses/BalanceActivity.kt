@@ -11,19 +11,21 @@ import com.example.whopaid.databinding.ActivityBalanceBinding
 import com.example.whopaid.models.Expense
 import com.example.whopaid.repo.ExpenseRepository
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 /**
- * Shows automatic calculation of debts and credits for the logged-in user.
- * Each item now includes:
- *  - Expense title
- *  - Currency information (e.g., EUR + converted RON)
- *  - Person involved
- *  - Amount
- *  - Checkbox for settlement (shared across group via Firestore)
+ * BalanceActivity – shows automatic calculation of debts and credits
+ * for the current logged-in user.
+ *
+ * Features:
+ * - Displays per-expense debts and credits (with currency and RON conversion)
+ * - Allows user to mark payments as settled (persistent in Firestore)
+ * - Real-time updates: all members see check/uncheck changes instantly
+ * - Admin can reset all settlements for the group
  */
 class BalanceActivity : AppCompatActivity() {
 
@@ -36,6 +38,8 @@ class BalanceActivity : AppCompatActivity() {
     private var groupId: String? = null
     private val balances = mutableListOf<BalanceItem>()
     private var isAdmin = false
+    private var settlementsListener: ListenerRegistration? = null
+    private var lastSettledKeys = setOf<String>() // used to update checkboxes dynamically
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +48,8 @@ class BalanceActivity : AppCompatActivity() {
 
         groupId = intent.getStringExtra("groupId")
         if (groupId == null) {
-            finish(); return
+            finish()
+            return
         }
 
         adapter = BalanceAdapter(balances) { item -> toggleSettlement(item) }
@@ -57,8 +62,14 @@ class BalanceActivity : AppCompatActivity() {
         loadBalances()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        // Stop real-time listener when activity is destroyed
+        settlementsListener?.remove()
+    }
+
     /**
-     * Loads group, expenses, and settlements from Firestore.
+     * Loads group and expenses, then sets up real-time listener for settlements.
      */
     private fun loadBalances() {
         val gid = groupId ?: return
@@ -73,29 +84,38 @@ class BalanceActivity : AppCompatActivity() {
 
                 val expResult = repo.getExpenses(gid)
                 if (!expResult.isSuccess) throw expResult.exceptionOrNull()!!
-
                 val expenses = expResult.getOrNull() ?: emptyList()
 
-                // Load all user names (for display)
+                // Get all involved user names
                 val userIds = expenses.flatMap { it.participants + it.payerUid }.distinct()
-                val usersMap = mutableMapOf<String, String>()
+                val names = mutableMapOf<String, String>()
                 if (userIds.isNotEmpty()) {
-                    val usersSnap = db.collection("users")
-                        .whereIn("__name__", userIds).get().await()
-                    for (doc in usersSnap.documents) {
-                        usersMap[doc.id] =
-                            doc.getString("name") ?: doc.getString("email") ?: doc.id
+                    val snap = db.collection("users").whereIn("__name__", userIds).get().await()
+                    for (doc in snap.documents) {
+                        names[doc.id] = doc.getString("name") ?: doc.getString("email") ?: doc.id
                     }
                 }
 
-                // Load settlements (to mark paid items)
-                val settledSnap = db.collection("groups")
+                // Listen in real-time for settlements updates
+                settlementsListener?.remove()
+                settlementsListener = db.collection("groups")
                     .document(gid)
                     .collection("settlements")
-                    .get().await()
-                val settledKeys = settledSnap.documents.map { it.id }.toSet()
+                    .addSnapshotListener { snapshot, error ->
+                        if (error != null) {
+                            Toast.makeText(
+                                this@BalanceActivity,
+                                "Error in settlements listener: ${error.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            return@addSnapshotListener
+                        }
 
-                calculateUserBalances(currentUser.uid, expenses, usersMap, settledKeys)
+                        val settledKeys = snapshot?.documents?.map { it.id }?.toSet() ?: emptySet()
+                        lastSettledKeys = settledKeys
+                        calculateUserBalances(currentUser.uid, expenses, names, settledKeys)
+                    }
+
                 binding.btnResetAll.visibility = if (isAdmin) View.VISIBLE else View.GONE
             } catch (e: Exception) {
                 Toast.makeText(
@@ -110,7 +130,8 @@ class BalanceActivity : AppCompatActivity() {
     }
 
     /**
-     * Calculates per-user debts/credits from expenses, preserving currency info.
+     * Calculates per-user debts & credits and updates the list.
+     * Each item’s "settled" state is now controlled by real-time Firestore data.
      */
     private fun calculateUserBalances(
         currentUid: String,
@@ -121,7 +142,10 @@ class BalanceActivity : AppCompatActivity() {
         val temp = mutableListOf<BalanceItem>()
 
         for (e in expenses) {
-            val share = if (e.participants.isNotEmpty()) e.amountInGroupCurrency / e.participants.size else 0.0
+            val share = if (e.participants.isNotEmpty())
+                e.amountInGroupCurrency / e.participants.size
+            else 0.0
+
             for (p in e.participants) {
                 if (p == e.payerUid) continue
                 val key = "${e.id}_${p}_${e.payerUid}"
@@ -161,13 +185,13 @@ class BalanceActivity : AppCompatActivity() {
         balances.clear()
         balances.addAll(temp)
         adapter.notifyDataSetChanged()
-
         binding.textEmpty.visibility =
             if (balances.isEmpty()) View.VISIBLE else View.GONE
     }
 
     /**
-     * Toggle settlement checkbox → sync with Firestore.
+     * Called when checkbox toggled → update Firestore state.
+     * Firestore snapshot listener ensures all users’ UIs update in real-time.
      */
     private fun toggleSettlement(item: BalanceItem) {
         val gid = groupId ?: return
@@ -190,6 +214,9 @@ class BalanceActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Remove all settled items from view (local only).
+     */
     private fun removeSettled() {
         val remaining = balances.filterNot { it.settled }.toMutableList()
         balances.clear()
@@ -198,6 +225,9 @@ class BalanceActivity : AppCompatActivity() {
         Toast.makeText(this, "Removed paid settlements from view", Toast.LENGTH_SHORT).show()
     }
 
+    /**
+     * Admin-only reset for all settlements (clear Firestore records).
+     */
     private fun confirmResetAll() {
         AlertDialog.Builder(this)
             .setTitle("Reset All Balances")
@@ -216,6 +246,7 @@ class BalanceActivity : AppCompatActivity() {
                 for (doc in snap.documents) doc.reference.delete().await()
                 Toast.makeText(this@BalanceActivity, "All settlements cleared", Toast.LENGTH_SHORT)
                     .show()
+                // Refresh after clearing all
                 loadBalances()
             } catch (e: Exception) {
                 Toast.makeText(
@@ -228,16 +259,16 @@ class BalanceActivity : AppCompatActivity() {
     }
 
     /**
-     * Data structure for one balance line item.
+     * Data model for a single debt/credit line.
      */
     data class BalanceItem(
         val id: String,
         val expenseTitle: String,
         val name: String,
-        val amountInGroupCurrency: Double, // converted to RON
-        val amountRaw: Double,             // amount in expense currency
-        val currencyCode: String,          // e.g., "EUR"
-        val type: String,                  // "debt" or "credit"
+        val amountInGroupCurrency: Double,
+        val amountRaw: Double,
+        val currencyCode: String,
+        val type: String, // "debt" or "credit"
         var settled: Boolean = false
     )
 }
