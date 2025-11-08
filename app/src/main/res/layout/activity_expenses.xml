@@ -27,6 +27,13 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
+        <Button
+            android:id="@+id/btnViewBalances"
+            android:text="View Balances"
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <!-- Loading indicator -->
         <ProgressBar
             android:id="@+id/progressBar"

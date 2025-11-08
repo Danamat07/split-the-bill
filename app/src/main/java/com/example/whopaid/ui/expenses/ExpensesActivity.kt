@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 /**
  * Displays all expenses for a group.
  * Any member can add, edit, or delete an expense.
+ * From here, user can also view automatic balances.
  */
 class ExpensesActivity : AppCompatActivity(), ExpenseAdapter.OnExpenseClickListener {
 
@@ -45,6 +46,13 @@ class ExpensesActivity : AppCompatActivity(), ExpenseAdapter.OnExpenseClickListe
             startActivity(intent)
         }
 
+        // open balances screen
+        binding.btnViewBalances.setOnClickListener {
+            val intent = Intent(this, BalanceActivity::class.java)
+            intent.putExtra("groupId", groupId)
+            startActivity(intent)
+        }
+
         loadExpenses()
     }
 
@@ -70,9 +78,6 @@ class ExpensesActivity : AppCompatActivity(), ExpenseAdapter.OnExpenseClickListe
         }
     }
 
-    /**
-     * When a user taps an expense → open edit screen.
-     */
     override fun onExpenseClick(expense: Expense) {
         val intent = Intent(this, CreateExpenseActivity::class.java)
         intent.putExtra("groupId", groupId)
@@ -80,9 +85,6 @@ class ExpensesActivity : AppCompatActivity(), ExpenseAdapter.OnExpenseClickListe
         startActivity(intent)
     }
 
-    /**
-     * When a user long-presses → ask to delete.
-     */
     override fun onExpenseLongClick(expense: Expense) {
         AlertDialog.Builder(this)
             .setTitle("Delete Expense")
@@ -98,9 +100,7 @@ class ExpensesActivity : AppCompatActivity(), ExpenseAdapter.OnExpenseClickListe
         CoroutineScope(Dispatchers.Main).launch {
             val result = repo.deleteExpense(gid, expense.id)
             binding.progressBar.visibility = View.GONE
-            if (result.isSuccess) {
-                loadExpenses()
-            }
+            if (result.isSuccess) loadExpenses()
         }
     }
 }
