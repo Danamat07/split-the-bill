@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 
 /**
  * Screen to create or edit an expense.
- * Any member can create, edit or delete.
+ * Any member can create, edit, or delete an expense.
  */
 class CreateExpenseActivity : AppCompatActivity() {
 
@@ -32,6 +32,7 @@ class CreateExpenseActivity : AppCompatActivity() {
     private var expenseId: String? = null
     private var membersMap = mutableMapOf<String, String>() // name -> uid
     private var selectedParticipants = mutableListOf<String>()
+    private var currentPayerUid: String? = null // <-- store payer for editing
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,36 +47,21 @@ class CreateExpenseActivity : AppCompatActivity() {
             return
         }
 
-        loadMembers()
+        // Step 1: load group members first
+        loadMembers {
+            // Step 2: after members loaded, if editing, load existing expense
+            if (expenseId != null) loadExistingExpense()
+        }
 
         binding.btnAddExpense.setOnClickListener { saveExpense() }
         binding.btnSelectParticipants.setOnClickListener { showParticipantDialog() }
-
-        if (expenseId != null) loadExistingExpense()
-    }
-
-    /**
-     * Loads existing expense for editing.
-     */
-    private fun loadExistingExpense() {
-        val gid = groupId ?: return
-        val eid = expenseId ?: return
-        binding.progressBar.visibility = View.VISIBLE
-        db.collection("groups").document(gid)
-            .collection("expenses").document(eid)
-            .get().addOnSuccessListener { doc ->
-                binding.progressBar.visibility = View.GONE
-                val exp = doc.toObject(Expense::class.java) ?: return@addOnSuccessListener
-                binding.etTitle.setText(exp.title)
-                binding.etAmount.setText(exp.amount.toString())
-                selectedParticipants = exp.participants.toMutableList()
-            }
     }
 
     /**
      * Loads group members to populate payer spinner.
+     * Calls [onLoaded] when done.
      */
-    private fun loadMembers() {
+    private fun loadMembers(onLoaded: (() -> Unit)? = null) {
         val gid = groupId ?: return
         db.collection("groups").document(gid).get().addOnSuccessListener { g ->
             val memberIds = g.get("members") as? List<String> ?: return@addOnSuccessListener
@@ -94,8 +80,47 @@ class CreateExpenseActivity : AppCompatActivity() {
                         names
                     )
                     binding.spinnerPayer.adapter = adapter
+
+                    // If a payer was already known (from existing expense), set selection
+                    currentPayerUid?.let { uid ->
+                        val payerName = membersMap.entries.find { it.value == uid }?.key
+                        if (payerName != null) {
+                            val index = names.indexOf(payerName)
+                            if (index >= 0) binding.spinnerPayer.setSelection(index)
+                        }
+                    }
+                    onLoaded?.invoke()
                 }
         }
+    }
+
+    /**
+     * Loads existing expense for editing.
+     */
+    private fun loadExistingExpense() {
+        val gid = groupId ?: return
+        val eid = expenseId ?: return
+        binding.progressBar.visibility = View.VISIBLE
+        db.collection("groups").document(gid)
+            .collection("expenses").document(eid)
+            .get().addOnSuccessListener { doc ->
+                binding.progressBar.visibility = View.GONE
+                val exp = doc.toObject(Expense::class.java) ?: return@addOnSuccessListener
+                binding.etTitle.setText(exp.title)
+                binding.etAmount.setText(exp.amount.toString())
+                selectedParticipants = exp.participants.toMutableList()
+                currentPayerUid = exp.payerUid
+
+                // if members are already loaded, update spinner selection
+                if (membersMap.isNotEmpty()) {
+                    val payerName = membersMap.entries.find { it.value == exp.payerUid }?.key
+                    if (payerName != null) {
+                        val names = membersMap.keys.toList()
+                        val index = names.indexOf(payerName)
+                        if (index >= 0) binding.spinnerPayer.setSelection(index)
+                    }
+                }
+            }
     }
 
     /**
@@ -152,6 +177,7 @@ class CreateExpenseActivity : AppCompatActivity() {
         }
 
         val payerUid = membersMap[payerName] ?: return
+        currentPayerUid = payerUid // remember current payer
         if (selectedParticipants.isEmpty()) {
             Toast.makeText(this, "Select at least one participant", Toast.LENGTH_SHORT).show()
             return

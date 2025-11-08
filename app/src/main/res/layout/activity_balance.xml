@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/textEmpty"
-        android:text="No balances to show"
+        android:text="@string/no_balances_to_show"
         android:visibility="gone"
         android:textAlignment="center"
         android:textSize="16sp"
@@ -22,14 +22,14 @@
 
     <Button
         android:id="@+id/btnDeleteSelected"
-        android:text="Hide Paid Settlements"
+        android:text="@string/hide_paid_settlements"
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/btnResetAll"
-        android:text="Reset All (Admin)"
+        android:text="@string/reset_all_admin"
         android:visibility="gone"
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
