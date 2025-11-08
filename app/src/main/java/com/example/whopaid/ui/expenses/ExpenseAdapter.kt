@@ -9,8 +9,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 /**
- * Adapter to display all expenses.
- * Single tap = edit; Long tap = delete.
+ * Adapter displaying expenses with currency information.
+ * - Shows raw amount + currency code + converted RON equivalent.
+ * - Tap = edit, Long tap = delete.
  */
 class ExpenseAdapter(
     private var items: List<Expense>,
@@ -24,9 +25,21 @@ class ExpenseAdapter(
 
     inner class VH(private val binding: ItemExpenseBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
         fun bind(e: Expense) {
             binding.tvTitle.text = e.title
-            binding.tvAmount.text = String.format("%.2f", e.amount)
+
+            // Format: "100.00 EUR (≈ 490.00 RON)"
+            val formatted = if (e.currencyCode == "RON") {
+                String.format("%.2f RON", e.amountRaw)
+            } else {
+                String.format(
+                    "%.2f %s (≈ %.2f RON)",
+                    e.amountRaw, e.currencyCode, e.amountInGroupCurrency
+                )
+            }
+            binding.tvAmount.text = formatted
+
             val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
             binding.tvDate.text = sdf.format(Date(e.createdAt))
 
@@ -39,7 +52,8 @@ class ExpenseAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val binding = ItemExpenseBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemExpenseBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return VH(binding)
     }
 

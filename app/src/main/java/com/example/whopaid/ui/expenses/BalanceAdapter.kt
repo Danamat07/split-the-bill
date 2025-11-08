@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.whopaid.databinding.ItemBalanceBinding
 
 /**
- * Adapter for balance items with name, expense title, amount, and checkbox.
- * Notifies parent when settlement state changes.
+ * Adapter for displaying detailed balances:
+ * shows expense title, user name, currency, and converted RON equivalent.
  */
 class BalanceAdapter(
     private val items: MutableList<BalanceActivity.BalanceItem>,
@@ -18,14 +18,19 @@ class BalanceAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: BalanceActivity.BalanceItem) {
+            // Example:
+            // "You owe John 45.00 EUR (≈ 223.50 RON) for Dinner"
             val label = if (item.type == "debt") {
-                "You owe ${item.name}"
+                "You owe ${item.name} %.2f %s (≈ %.2f RON)".format(
+                    item.amountRaw, item.currencyCode, item.amountInGroupCurrency
+                )
             } else {
-                "${item.name} owes you"
+                "${item.name} owes you %.2f %s (≈ %.2f RON)".format(
+                    item.amountRaw, item.currencyCode, item.amountInGroupCurrency
+                )
             }
             binding.tvName.text = label
             binding.tvExpense.text = "For: ${item.expenseTitle}"
-            binding.tvAmount.text = String.format("%.2f", item.amount)
             binding.cbSettled.isChecked = item.settled
 
             binding.cbSettled.setOnCheckedChangeListener { _, isChecked ->
@@ -42,6 +47,5 @@ class BalanceAdapter(
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) = holder.bind(items[position])
-
     override fun getItemCount(): Int = items.size
 }
