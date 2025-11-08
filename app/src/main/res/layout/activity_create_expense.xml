@@ -1,98 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/scrollView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:padding="16dp"
-    android:fillViewport="true">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Title input -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <EditText
+            android:id="@+id/etTitle"
             android:hint="@string/expense_title"
-            app:boxStrokeColor="?attr/colorPrimary">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textCapSentences"
-                android:autofillHints="name"
-                android:minHeight="48dp"
-                android:importantForAutofill="yes" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Amount input -->
-        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/etAmount"
             android:hint="@string/expense_amount"
-            android:layout_marginTop="12dp"
-            app:boxStrokeColor="?attr/colorPrimary">
+            android:inputType="numberDecimal"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etAmount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:autofillHints="creditCardNumber"
-                android:minHeight="48dp"
-                android:importantForAutofill="yes" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Payer selection -->
-        <TextView
-            android:id="@+id/tvPayerLabel"
-            android:text="@string/label_payer"
-            android:textStyle="bold"
-            android:layout_marginTop="12dp"
-            android:layout_width="wrap_content"
+        <!-- New Spinner for selecting currency -->
+        <Spinner
+            android:id="@+id/spinnerCurrency"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <Spinner
             android:id="@+id/spinnerPayer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:spinnerMode="dropdown"
-            android:minHeight="48dp"
-            android:layout_marginTop="4dp" />
-
-        <!-- Participants selection -->
-        <Button
-            android:id="@+id/btnSelectParticipants"
-            android:text="@string/select_participants"
-            android:textAllCaps="false"
-            android:minHeight="48dp"
-            android:paddingVertical="12dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <!-- Save expense -->
+        <Button
+            android:id="@+id/btnSelectParticipants"
+            android:text="@string/select_participants"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <Button
             android:id="@+id/btnAddExpense"
             android:text="@string/save_expense"
-            android:textAllCaps="false"
-            android:minHeight="48dp"
-            android:paddingVertical="12dp"
             android:layout_marginTop="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <!-- Progress indicator -->
         <ProgressBar
             android:id="@+id/progressBar"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
             android:visibility="gone"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
     </LinearLayout>
 </ScrollView>

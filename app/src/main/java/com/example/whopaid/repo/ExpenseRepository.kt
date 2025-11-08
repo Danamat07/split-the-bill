@@ -5,7 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
 /**
- * Repository handling Firestore operations for expenses inside a group.
+ * Repository handling Firestore operations for expenses including currency conversion.
  */
 class ExpenseRepository {
 
@@ -15,13 +15,16 @@ class ExpenseRepository {
         db.collection("groups").document(groupId).collection("expenses")
 
     /**
-     * Add a new expense to a group's expenses subcollection.
+     * Add a new expense with currency conversion.
      */
-    suspend fun addExpense(groupId: String, expense: Expense): Result<Unit> {
+    suspend fun addExpenseWithCurrency(
+        groupId: String,
+        expense: Expense
+    ): Result<Unit> {
         return try {
             val doc = expensesCollection(groupId).document()
-            val exp = expense.copy(id = doc.id, createdAt = System.currentTimeMillis())
-            doc.set(exp).await()
+            val toSave = expense.copy(id = doc.id)
+            doc.set(toSave).await()
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
@@ -29,7 +32,22 @@ class ExpenseRepository {
     }
 
     /**
-     * Fetch all expenses for a specific group.
+     * Update existing expense (including currency change).
+     */
+    suspend fun updateExpenseWithCurrency(
+        groupId: String,
+        expense: Expense
+    ): Result<Unit> {
+        return try {
+            expensesCollection(groupId).document(expense.id).set(expense).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    /**
+     * Fetch all expenses for a group.
      */
     suspend fun getExpenses(groupId: String): Result<List<Expense>> {
         return try {
@@ -43,17 +61,9 @@ class ExpenseRepository {
         }
     }
 
-    /** Updates an existing expense. */
-    suspend fun updateExpense(groupId: String, expense: Expense): Result<Unit> {
-        return try {
-            expensesCollection(groupId).document(expense.id).set(expense).await()
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    /** Deletes an expense. */
+    /**
+     * Delete an expense
+     */
     suspend fun deleteExpense(groupId: String, expenseId: String): Result<Unit> {
         return try {
             expensesCollection(groupId).document(expenseId).delete().await()
@@ -62,5 +72,4 @@ class ExpenseRepository {
             Result.failure(e)
         }
     }
-
 }
