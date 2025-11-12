@@ -3,8 +3,6 @@ package com.example.whopaid.ui.groups
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.provider.ContactsContract
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.whopaid.databinding.ActivityShowGroupQrBinding
 import com.google.zxing.BarcodeFormat
@@ -29,19 +27,18 @@ class ShowGroupQrActivity : AppCompatActivity() {
             return
         }
 
-        val payload = "JOIN_GROUP:$groupId" // formatul QR-ului
+        val payload = "JOIN_GROUP:$groupId"
         val bitmap = generateQrBitmap(payload, 800, 800)
         if (bitmap != null) {
             binding.imageQr.setImageBitmap(bitmap)
-            binding.progressBar.visibility = View.GONE
+            binding.progressBar.visibility = android.view.View.GONE
         } else {
-            binding.progressBar.visibility = View.GONE
-            binding.textError.visibility = View.VISIBLE
+            binding.progressBar.visibility = android.view.View.GONE
+            binding.textError.visibility = android.view.View.VISIBLE
             binding.textError.text = "Eroare generare QR"
         }
 
         binding.btnShare.setOnClickListener {
-            // share QR as image via intent - simplu: share text link (payload). Dacă vrei sharing imagine complex, salvare bitmap local etc.
             val share = Intent()
             share.action = Intent.ACTION_SEND
             share.putExtra(Intent.EXTRA_TEXT, payload)

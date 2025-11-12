@@ -5,5 +5,6 @@ data class Group(
     val name: String = "",
     val description: String = "",
     val adminUid: String = "",
-    val members: List<String> = listOf()
+    val members: List<String> = listOf(),
+    var qrPayload: String? = null
 )
