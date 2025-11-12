@@ -1,56 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="16dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="24dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_background">
+    android:background="@drawable/background_login_register">
 
     <LinearLayout
         android:orientation="vertical"
+        android:gravity="start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.google.android.material.textfield.TextInputLayout
+        <!-- Page title -->
+
+        <!-- Group Name label -->
+        <TextView
+            android:id="@+id/tvCreateGroupTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:fontFamily="serif"
+            android:text="@string/create_group"
+            android:textColor="#8C144E"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/tvLabelName"
+            android:textSize="19sp"
+            android:text="@string/group_name"
+            android:textColor="#8C144E"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+
+        <!-- Group Name input (touch target OK) -->
+        <EditText
+            android:id="@+id/etName"
+            android:textSize="15sp"
+
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="serif"
+            android:hint="Type here..."
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
+            android:textColor="#000000"
+            android:textColorHint="#FFFFFF"
+            tools:ignore="HardcodedText" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etName"
-                android:hint="@string/group_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_marginTop="8dp"
+        <!-- Line under name -->
+        <View
+            android:id="@+id/viewLineName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="1dp"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="30dp" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etDescription"
-                android:hint="@string/description_optional"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </com.google.android.material.textfield.TextInputLayout>
+        <!-- Description label -->
+        <TextView
+            android:id="@+id/tvLabelDescription"
+            android:textSize="19sp"
+            android:text="@string/description_optional"
+            android:textColor="#8C144E"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
 
+        <!-- Description input -->
+        <EditText
+            android:id="@+id/etDescription"
+            android:textSize="15sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="2dp"
+            android:paddingTop="1dp"
+            android:paddingBottom="48dp"
+            android:layout_marginBottom="5dp"
+            android:background="@android:color/transparent"
+            android:hint="Type here..."
+            android:inputType="textMultiLine"
+            android:lines="1"
+            android:maxLines="3"
+            android:textColor="#000000"
+            android:textColorHint="#FFFFFF"
+            android:fontFamily="serif"
+            tools:ignore="HardcodedText" />
+
+        <!-- Line under description -->
+        <View
+            android:id="@+id/viewLineDescription"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="30dp" />
+
+        <!-- Create button -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnCreate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/create_group"
+            android:textColor="#C7B8B0"
             android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/button_background"
+            android:background="@drawable/pink_button"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
-            android:layout_marginTop="12dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_marginBottom="16dp" />
 
+        <!-- Progress bar -->
         <ProgressBar
             android:id="@+id/progressBar"
             android:visibility="gone"
-            android:layout_gravity="center"
+            android:layout_gravity="start"
             android:layout_marginTop="12dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 </ScrollView>

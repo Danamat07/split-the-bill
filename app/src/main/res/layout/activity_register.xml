@@ -1,134 +1,234 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    android:background="@drawable/gradient_background">
+    android:background="@drawable/background_login_register">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="start">
 
         <!-- Page title -->
         <TextView
             android:text="@string/create_account"
-            android:textSize="24sp"
+            android:textSize="28sp"
             android:textStyle="bold"
-            android:textColor="#2D1B3D"
-            android:layout_marginBottom="16dp"
+            android:fontFamily="serif"
+            android:textColor="#8C144E"
+            android:layout_marginBottom="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <!-- Name input -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <!-- Name label -->
+        <TextView
+            android:text="Full Name"
+            android:textSize="19sp"
+            android:textColor="#8C144E"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etName"
-                android:hint="@string/full_name"
-                android:inputType="textPersonName"
-                android:minHeight="48dp"
-                android:importantForAutofill="yes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <!-- Name input -->
+        <EditText
+            android:id="@+id/etName"
+            android:textSize="15sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="serif"
+            android:hint="Type here..."
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
+            android:textColor="#000000"
+            android:textColorHint="#FFFFFF" />
+
+        <!-- Line under name -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="30dp" />
+
+        <!-- Email label -->
+        <TextView
+            android:text="Email"
+            android:textSize="19sp"
+            android:textColor="#8C144E"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
 
         <!-- Email input -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_marginTop="8dp"
+        <EditText
+            android:id="@+id/etEmail"
+            android:textSize="15sp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="serif"
+            android:hint="Type here..."
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
+            android:textColor="#000000"
+            android:textColorHint="#FFFFFF" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEmail"
-                android:hint="@string/email_address"
-                android:inputType="textEmailAddress"
-                android:minHeight="48dp"
-                android:importantForAutofill="yes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Phone number input -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_marginTop="8dp"
+        <!-- Line under email -->
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="1dp"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="30dp" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etPhone"
-                android:hint="@string/phone_number"
-                android:inputType="phone"
-                android:minHeight="48dp"
-                android:importantForAutofill="yes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <!-- Phone label -->
+        <TextView
+            android:text="Phone Number"
+            android:textSize="19sp"
+            android:textColor="#8C144E"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+
+        <!-- Phone input -->
+        <EditText
+            android:id="@+id/etPhone"
+            android:textSize="15sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="serif"
+            android:hint="Type here..."
+            android:inputType="phone"
+            android:minHeight="48dp"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
+            android:textColor="#000000"
+            android:textColorHint="#FFFFFF" />
+
+        <!-- Line under phone -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="30dp" />
+
+        <!-- Password label -->
+        <TextView
+            android:text="Password"
+            android:textSize="19sp"
+            android:textColor="#8C144E"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
 
         <!-- Password input -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_marginTop="8dp"
+        <EditText
+            android:id="@+id/etPassword"
+            android:textSize="15sp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="serif"
+            android:hint="Type here..."
+            android:inputType="textPassword"
+            android:minHeight="48dp"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
+            android:textColor="#000000"
+            android:textColorHint="#FFFFFF" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etPassword"
-                android:hint="@string/create_password"
-                android:inputType="textPassword"
-                android:minHeight="48dp"
-                android:importantForAutofill="yes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <!-- Line under password -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="30dp" />
+
+        <!-- Confirm password label -->
+        <TextView
+            android:text="Confirm Password"
+            android:textSize="19sp"
+            android:textColor="#8C144E"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
 
         <!-- Confirm password input -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_marginTop="8dp"
+        <EditText
+            android:id="@+id/etConfirmPassword"
+            android:textSize="15sp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="serif"
+            android:hint="Type here..."
+            android:inputType="textPassword"
+            android:minHeight="48dp"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
+            android:textColor="#000000"
+            android:textColorHint="#FFFFFF" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etConfirmPassword"
-                android:hint="@string/confirm_password"
-                android:inputType="textPassword"
-                android:minHeight="48dp"
-                android:importantForAutofill="yes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <!-- Line under confirm password -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="16dp" />
 
         <!-- Register button -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnRegister"
-            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
             android:text="@string/register"
+            android:textColor="#C7B8B0"
             android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/button_background"
+            android:background="@drawable/pink_button"
             android:paddingTop="16dp"
-            android:paddingBottom="16dp" />
+            android:paddingBottom="16dp"
+            android:layout_marginBottom="16dp" />
 
-        <!-- Progress bar (hidden by default) -->
+        <!-- Progress bar -->
         <ProgressBar
             android:id="@+id/progressBar"
             android:visibility="gone"
-            android:layout_gravity="center"
+            android:layout_gravity="start"
             android:layout_marginTop="12dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <!-- Link to go back to login -->
+        <!-- Link to login -->
         <TextView
             android:id="@+id/tvHaveAccount"
             android:text="@string/already_have_account"
-            android:textColor="#2D1B3D"
+            android:textColor="#8C144E"
             android:layout_marginTop="12dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
+
     </LinearLayout>
 </ScrollView>
