@@ -45,4 +45,16 @@
         android:tint="#FFFFFF"
         android:layout_gravity="bottom|end" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabScanGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:contentDescription="Scan QR"
+        android:src="@android:drawable/ic_menu_camera"
+        android:backgroundTint="@color/button_purple"
+        android:tint="#FFFFFF"
+        android:layout_gravity="bottom|start" />
+
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

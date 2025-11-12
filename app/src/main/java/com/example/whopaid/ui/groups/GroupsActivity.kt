@@ -11,18 +11,11 @@ import com.example.whopaid.models.Group
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 
-/**
- * Displays a list of groups the current user belongs to.
- * Provides "Create Group" button to go to CreateGroupActivity.
- *
- * Uses a Firestore real-time listener on groups collection with a query:
- *    whereArrayContains("members", currentUid)
- */
 class GroupsActivity : AppCompatActivity(), GroupAdapter.OnItemClickListener {
 
     private lateinit var binding: ActivityGroupsBinding
     private val db = FirebaseFirestore.getInstance()
-    private val repo = AuthRepository()
+    private val authRepo = AuthRepository()
     private var listener: ListenerRegistration? = null
     private lateinit var adapter: GroupAdapter
 
@@ -31,38 +24,46 @@ class GroupsActivity : AppCompatActivity(), GroupAdapter.OnItemClickListener {
         binding = ActivityGroupsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        adapter = GroupAdapter(listOf(), this)
+        binding.recycler.layoutManager = LinearLayoutManager(this)
+        binding.recycler.adapter = adapter
+
         binding.fabCreateGroup.setOnClickListener {
             startActivity(Intent(this, CreateGroupActivity::class.java))
         }
 
-        adapter = GroupAdapter(listOf(), this)
-        binding.recycler.layoutManager = LinearLayoutManager(this)
-        binding.recycler.adapter = adapter
+        binding.fabScanGroup.setOnClickListener {
+            startActivity(Intent(this, ScanQrActivity::class.java))
+        }
 
         loadUserGroups()
     }
 
     private fun loadUserGroups() {
-        val current = repo.currentUser()
-        if (current == null) {
-            // if not logged in, show empty state and return
+        val currentUser = authRepo.currentUser()
+        if (currentUser == null) {
             binding.textEmpty.visibility = View.VISIBLE
+            binding.textEmpty.text = "Not logged in"
             return
         }
+
         binding.textEmpty.visibility = View.GONE
 
-        // real-time query for groups where the current user is a member
         listener = db.collection("groups")
-            .whereArrayContains("members", current.uid)
+            .whereArrayContains("members", currentUser.uid)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     binding.textEmpty.text = "Error loading groups: ${error.message}"
                     binding.textEmpty.visibility = View.VISIBLE
                     return@addSnapshotListener
                 }
+
                 val groups = snapshot?.documents?.mapNotNull { doc ->
-                    doc.toObject(Group::class.java)
+                    val group = doc.toObject(Group::class.java)
+                    group?.id = doc.id  // id este var, nu val
+                    group
                 } ?: emptyList()
+
                 adapter.updateData(groups)
                 binding.textEmpty.visibility = if (groups.isEmpty()) View.VISIBLE else View.GONE
             }
@@ -73,9 +74,6 @@ class GroupsActivity : AppCompatActivity(), GroupAdapter.OnItemClickListener {
         listener?.remove()
     }
 
-    /**
-     * When an item is clicked, navigate to GroupDetailsActivity with groupId.
-     */
     override fun onItemClick(group: Group) {
         val intent = Intent(this, GroupDetailsActivity::class.java)
         intent.putExtra("groupId", group.id)
