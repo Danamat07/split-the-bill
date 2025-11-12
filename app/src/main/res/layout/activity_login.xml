@@ -1,80 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Login screen layout (Material 3 compatible).
-    Contains email and password fields, a login button,
-    and a link to go to the registration screen.
--->
+<!-- Login screen layout (Material 3 compatible) -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="24dp"
-    android:gravity="center_horizontal"
+    android:gravity="start"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_background">
+    android:background="@drawable/background_login_register">
 
     <!-- Page title -->
     <TextView
         android:text="@string/login"
-        android:textSize="24sp"
+        android:textSize="28sp"
         android:textStyle="bold"
-        android:textColor="#2D1B3D"
-        android:layout_marginBottom="16dp"
+        android:fontFamily="serif"
+        android:textColor="#8C144E"
+        android:layout_marginBottom="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <!-- Email label -->
+    <TextView
+        android:text="Email"
+        android:textSize="19sp"
+        android:textColor="#8C144E"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="HardcodedText" />
+
     <!-- Email input -->
-    <com.google.android.material.textfield.TextInputLayout
+    <EditText
+        android:id="@+id/etEmail"
+        android:textSize="15sp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etEmail"
-            android:hint="@string/email_address"
-            android:inputType="textEmailAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:autofillHints=""
+        android:background="@android:color/transparent"
+        android:fontFamily="serif"
+        android:hint="Type here..."
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:textColor="#000000"
+        android:textColorHint="#FFFFFF"
+        tools:ignore="HardcodedText" />
+
+    <!-- Line under email -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFFFFF"
+        android:layout_marginBottom="30dp" />
+
+    <!-- Password label -->
+    <TextView
+        android:text="Password"
+        android:textSize="19sp"
+        android:textColor="#8C144E"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="HardcodedText" />
 
     <!-- Password input -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_marginTop="8dp"
+    <EditText
+        android:id="@+id/etPassword"
+        android:textSize="15sp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etPassword"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:autofillHints=""
+        android:background="@android:color/transparent"
+        android:fontFamily="serif"
+        android:hint="Type here..."
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:textColor="#000000"
+        android:textColorHint="#FFFFFF"
+        tools:ignore="HardcodedText" />
+
+    <!-- Line under password -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFFFFF"
+        android:layout_marginBottom="16dp" />
 
     <!-- Login button -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnLogin"
-        android:layout_marginTop="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/login"
+        android:textColor="#C7B8B0"
         android:textAllCaps="false"
-        android:textColor="#FFFFFF"
-        android:background="@drawable/button_background"
+        android:background="@drawable/pink_button"
         android:paddingTop="16dp"
-        android:paddingBottom="16dp" />
+        android:paddingBottom="16dp"
+        android:layout_marginBottom="16dp" />
 
-    <!-- Progress bar (hidden by default) -->
+    <!-- Progress bar -->
     <ProgressBar
         android:id="@+id/progressBar"
         android:visibility="gone"
-        android:layout_gravity="center"
+        android:layout_gravity="start"
         android:layout_marginTop="12dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <!-- Link to registration screen -->
+    <!-- Link to registration -->
     <TextView
         android:id="@+id/tvRegister"
         android:text="@string/dont_have_account"
-        android:textColor="#2D1B3D"
+        android:textColor="#8C144E"
         android:layout_marginTop="12dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
+
 </LinearLayout>

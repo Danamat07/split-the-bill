@@ -3,7 +3,7 @@
     android:shape="rectangle">
 
     <!-- Culoarea de fundal -->
-    <solid android:color="#FBBD40" />
+    <solid android:color="#8C144E" />
 
     <!-- Colțuri rotunjite -->
     <corners android:radius="30dp" />
@@ -11,7 +11,7 @@
     <!-- Contur (aceeași culoare ca fundalul) -->
     <stroke
         android:width="2dp"
-        android:color="#FBBD40" />
+        android:color="#8C144E" />
 
 </shape>
 
