@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
  *  - Add members by email
  *  - Remove existing members
  *  - Delete the group
+ *  - Generate QR code for others to join
  * Non-admin members can leave the group.
  *
  * All members can:
@@ -65,10 +66,18 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
         binding.btnDeleteGroup.setOnClickListener { confirmAndDelete() }
         binding.btnLeaveGroup.setOnClickListener { leaveGroup() }
 
-        // NEW: navigate to expenses screen
+        // open expenses screen
         binding.btnViewExpenses.setOnClickListener {
             val intent = Intent(this, com.example.whopaid.ui.expenses.ExpensesActivity::class.java)
             intent.putExtra("groupId", groupId)
+            startActivity(intent)
+        }
+
+        // new: open QR generator screen (admin only)
+        binding.btnShowQr.setOnClickListener {
+            val gid = groupId ?: return@setOnClickListener
+            val intent = Intent(this, ShowGroupQrActivity::class.java)
+            intent.putExtra("groupId", gid)
             startActivity(intent)
         }
 
@@ -101,6 +110,7 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
         // Show/hide buttons based on role
         binding.btnAddMember.visibility = if (isAdmin) View.VISIBLE else View.GONE
         binding.btnDeleteGroup.visibility = if (isAdmin) View.VISIBLE else View.GONE
+        binding.btnShowQr.visibility = if (isAdmin) View.VISIBLE else View.GONE
         binding.btnLeaveGroup.visibility = if (isAdmin) View.GONE else View.VISIBLE
 
         // Load members' names

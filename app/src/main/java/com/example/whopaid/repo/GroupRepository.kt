@@ -40,7 +40,7 @@ class GroupRepository {
                 description = description,
                 adminUid = admin.uid,
                 members = listOf(admin.uid),
-                createdAt = System.currentTimeMillis()
+                //createdAt = System.currentTimeMillis()
             )
 
             // write group doc
