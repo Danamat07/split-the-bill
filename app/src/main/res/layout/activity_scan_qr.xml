@@ -1,22 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="12dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnOpenCamera"
-        android:text="Open Camera"
+    <com.journeyapps.barcodescanner.DecoratedBarcodeView
+        android:id="@+id/barcodeScanner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
-    <ImageView
-        android:id="@+id/imagePreview"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="16dp"
-        android:scaleType="centerCrop"
-        android:contentDescription="Preview image"/>
+        android:layout_height="wrap_content">
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnToggleCameraScan"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Start Camera Scan" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnFromGallery"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="From Gallery" />
+    </LinearLayout>
 </LinearLayout>
