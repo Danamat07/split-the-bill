@@ -1,6 +1,7 @@
 package com.example.whopaid.ui.groups
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -57,6 +58,20 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
         binding.btnLeaveGroup.setOnClickListener { leaveGroup() }
         binding.btnViewExpenses.setOnClickListener {
             val intent = android.content.Intent(this, com.example.whopaid.ui.expenses.ExpensesActivity::class.java)
+            intent.putExtra("groupId", groupId)
+            startActivity(intent)
+        }
+
+        // NEW: open live map
+        binding.btnLiveMap.setOnClickListener {
+            val intent = Intent(this, GroupMapActivity::class.java)
+            intent.putExtra("groupId", groupId)
+            startActivity(intent)
+        }
+
+        // NEW: open location settings
+        binding.btnLocationSettings.setOnClickListener {
+            val intent = Intent(this, LocationSettingsActivity::class.java)
             intent.putExtra("groupId", groupId)
             startActivity(intent)
         }

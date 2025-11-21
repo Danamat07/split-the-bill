@@ -1,3 +1,6 @@
+/*
+  File: app/build.gradle
+*/
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -58,6 +61,15 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
 
+    implementation("androidx.preference:preference-ktx:1.2.1")
+    implementation("com.google.firebase:firebase-firestore-ktx:24.6.1")
+
+    // Location (FusedLocationProvider)
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
+    // OSMdroid (OpenStreetMap)
+    implementation("org.osmdroid:osmdroid-android:6.1.14")
+
     // Tests
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -78,5 +90,4 @@ dependencies {
 
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.google.zxing:core:3.4.1")
-
 }
