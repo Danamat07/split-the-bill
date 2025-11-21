@@ -21,7 +21,7 @@ class MemberAdapter(
 
     inner class VH(private val binding: ItemMemberBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(user: User) {
-            binding.tvMemberName.text = user.name.ifEmpty { user.email }
+            binding.tvMemberName.text = user.name?.ifEmpty { user.email } ?: user.email
             binding.root.setOnLongClickListener {
                 listener.onMemberLongClick(user)
                 true
