@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.preference.PreferenceManager
 import com.example.whopaid.databinding.ActivityGroupMapBinding
 import com.example.whopaid.repo.LocationRepository
 import com.example.whopaid.repo.SharedLocation
@@ -19,6 +20,7 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -40,51 +42,77 @@ class GroupMapActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         groupId = intent.getStringExtra("groupId")
-        if (groupId == null) { Toast.makeText(this, "Group missing", Toast.LENGTH_SHORT).show(); finish(); return }
+        if (groupId == null) {
+            Toast.makeText(this, "Group missing", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
 
-        if (!hasLocationPermissions()) requestLocationPermissions()
-        else initMap()
+        // Configurare OSMdroid
+        val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        Configuration.getInstance().load(applicationContext, prefs)
+        Configuration.getInstance().osmdroidBasePath = File(cacheDir, "osmdroid")
+        Configuration.getInstance().osmdroidTileCache = File(cacheDir, "osmdroid/tiles")
+
+        if (hasLocationPermission()) {
+            initMap()
+        } else {
+            requestLocationPermission()
+        }
     }
 
-    private fun hasLocationPermissions(): Boolean {
+    private fun hasLocationPermission(): Boolean {
         val fine = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
         val coarse = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
         return fine || coarse
     }
 
-    private fun requestLocationPermissions() {
-        val permissions = mutableListOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) permissions.add(Manifest.permission.FOREGROUND_SERVICE_LOCATION)
-        ActivityCompat.requestPermissions(this, permissions.toTypedArray(), LOCATION_REQUEST_CODE)
+    private fun requestLocationPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+            LOCATION_REQUEST_CODE
+        )
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults.any { it == PackageManager.PERMISSION_GRANTED }) initMap()
-            else { Toast.makeText(this, "Location permission is required to show map", Toast.LENGTH_LONG).show(); finish() }
+            if (grantResults.any { it == PackageManager.PERMISSION_GRANTED }) {
+                initMap()
+            } else {
+                Toast.makeText(this, "Location permission is required to show map", Toast.LENGTH_LONG).show()
+                finish()
+            }
         }
     }
 
     private fun initMap() {
-        Configuration.getInstance().load(applicationContext, androidx.preference.PreferenceManager.getDefaultSharedPreferences(applicationContext))
-
         val map = binding.mapview
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.setMultiTouchControls(true)
         map.controller.setZoom(15.0)
 
-        // My location overlay
-        myLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(this), map)
-        myLocationOverlay?.enableMyLocation()
-        myLocationOverlay?.runOnFirstFix {
-            val loc = myLocationOverlay?.myLocation
-            if (loc != null) map.controller.setCenter(GeoPoint(loc.latitude, loc.longitude))
+        // Overlay locație utilizator
+        if (hasLocationPermission()) {
+            myLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(this), map)
+            myLocationOverlay?.enableMyLocation()
+            myLocationOverlay?.runOnFirstFix {
+                val loc = myLocationOverlay?.myLocation
+                if (loc != null) {
+                    // Asigurăm acces UI thread pentru setCenter
+                    runOnUiThread {
+                        map.controller.setCenter(GeoPoint(loc.latitude, loc.longitude))
+                    }
+                }
+            }
+            map.overlays.add(myLocationOverlay)
         }
-        map.overlays.add(myLocationOverlay)
 
         binding.progressLoading.visibility = View.VISIBLE
-        listener = locationRepo.observeGroupLocations(groupId!!) { list: List<SharedLocation> ->
+
+        // Ascultăm locațiile din Firestore
+        listener = locationRepo.observeGroupLocations(groupId!!) { list ->
             runOnUiThread {
                 binding.progressLoading.visibility = View.GONE
                 updateMarkers(list)
@@ -95,13 +123,20 @@ class GroupMapActivity : AppCompatActivity() {
     private fun updateMarkers(list: List<SharedLocation>) {
         val map = binding.mapview
         val presentUids = list.map { it.uid }.toSet()
+
+        // Șterge marker-ele utilizatorilor care au oprit sharing-ul
         markers.keys.filter { it !in presentUids }.forEach { uid ->
             markers[uid]?.let { map.overlays.remove(it) }
             markers.remove(uid)
         }
 
+        // Adaugă sau actualizează marker-ele
         for (loc in list) {
-            if (!loc.isSharing) { markers[loc.uid]?.let { map.overlays.remove(it) }; markers.remove(loc.uid); continue }
+            if (!loc.isSharing) {
+                markers[loc.uid]?.let { map.overlays.remove(it) }
+                markers.remove(loc.uid)
+                continue
+            }
 
             val pos = GeoPoint(loc.lat, loc.lng)
             val marker = markers[loc.uid]
@@ -120,13 +155,29 @@ class GroupMapActivity : AppCompatActivity() {
             }
         }
 
-        if (markers.isNotEmpty()) map.controller.setCenter(markers.values.first().position)
+        // Centrează harta pe primul marker, dacă există
+        if (markers.isNotEmpty()) {
+            map.controller.setCenter(markers.values.first().position)
+        }
+
         map.invalidate()
     }
 
     private fun tsToString(ts: Timestamp): String {
         val sdf = SimpleDateFormat("HH:mm:ss dd/MM", Locale.getDefault())
         return sdf.format(ts.toDate())
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.mapview.onResume()
+        myLocationOverlay?.enableMyLocation()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.mapview.onPause()
+        myLocationOverlay?.disableMyLocation()
     }
 
     override fun onDestroy() {
