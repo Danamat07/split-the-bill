@@ -44,4 +44,13 @@
     <string name="reset_all_admin">Reset All (Admin)</string>
     <string name="hide_paid_settlements">Hide Paid Settlements</string>
     <string name="no_balances_to_show">No balances to show</string>
+
+    <string name="location_permission_required">Location permission required</string>
+    <string name="group_missing">Group missing</string>
+    <string name="group_unknown">unknown</string>
+    <string name="group_label">Group: %1$s</string>
+    <string name="must_be_logged_in">Must be logged in</string>
+    <string name="started_sharing_location">Started sharing location</string>
+    <string name="stopped_sharing_location">Stopped sharing location</string>
+
 </resources>

@@ -59,6 +59,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <!-- NEW: Live Map button -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnLiveMap"
+            android:text="View Live Map"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/button_background"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- NEW: Location Settings -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnLocationSettings"
+            android:text="Location Settings"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/button_background"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <!-- Admin-only: Add member -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnAddMember"

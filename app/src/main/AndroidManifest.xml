@@ -1,10 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.whopaid">
 
     <!-- Permisiuni -->
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
+
+    <!-- Location permissions -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -24,6 +30,8 @@
         <activity android:name="com.example.whopaid.ui.groups.GroupsActivity"/>
         <activity android:name="com.example.whopaid.ui.groups.CreateGroupActivity"/>
         <activity android:name="com.example.whopaid.ui.groups.GroupDetailsActivity"/>
+        <activity android:name="com.example.whopaid.ui.groups.GroupMapActivity"/>
+        <activity android:name="com.example.whopaid.ui.groups.LocationSettingsActivity"/>
 
         <!-- Expenses screens -->
         <activity android:name="com.example.whopaid.ui.expenses.ExpensesActivity"/>
@@ -45,9 +53,10 @@
             </intent-filter>
         </activity>
 
+        <!-- Foreground service for location sharing -->
+        <service
+            android:name="com.example.whopaid.service.ForegroundLocationService"
+            android:exported="false"
+            android:foregroundServiceType="location"/>
     </application>
-
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
-
 </manifest>

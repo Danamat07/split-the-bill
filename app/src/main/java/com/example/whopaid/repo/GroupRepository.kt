@@ -16,8 +16,6 @@ class GroupRepository {
         return try {
             val docRef = groupsCol.document()
             val groupId = docRef.id
-
-            // Generează payload-ul QR automat
             val qrPayload = "JOIN_GROUP:$groupId"
 
             val group = Group(
@@ -29,10 +27,8 @@ class GroupRepository {
                 qrPayload = qrPayload
             )
 
-            // Scrie documentul grupului
             docRef.set(group).await()
 
-            // Actualizează array-ul groups al utilizatorului
             usersCol.document(admin.uid)
                 .update("groups", FieldValue.arrayUnion(groupId))
                 .addOnFailureListener {
@@ -45,6 +41,15 @@ class GroupRepository {
             Result.success(group)
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+
+    suspend fun getGroupById(groupId: String): Group? {
+        return try {
+            val snapshot = groupsCol.document(groupId).get().await()
+            if (snapshot.exists()) snapshot.toObject(Group::class.java) else null
+        } catch (e: Exception) {
+            null
         }
     }
 
