@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <!-- View Expenses button (visible for all members) -->
+        <!-- View Expenses button -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnViewExpenses"
             android:text="View Expenses"
@@ -72,7 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <!-- NEW: Generate QR code (admin only) -->
+        <!-- Generate QR code (admin only) -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnShowQr"
             android:text="Generate QR for Group"
@@ -83,6 +83,32 @@
             android:paddingBottom="14dp"
             android:layout_marginTop="10dp"
             android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Share Location button -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnShareLocation"
+            android:text="Start Share Location"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/button_background"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- View Live Map button -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnOpenMap"
+            android:text="View Live Map"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/button_background"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -128,7 +154,7 @@
             android:layout_height="250dp"
             android:layout_marginTop="16dp"
             android:visibility="gone"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center" />
 
         <!-- Loading indicator for QR -->
         <ProgressBar
@@ -137,7 +163,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </LinearLayout>
 </ScrollView>

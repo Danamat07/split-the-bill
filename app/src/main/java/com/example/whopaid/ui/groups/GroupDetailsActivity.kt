@@ -1,6 +1,7 @@
 package com.example.whopaid.ui.groups
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,10 +11,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.whopaid.AuthRepository
+import com.example.whopaid.R
 import com.example.whopaid.databinding.ActivityGroupDetailsBinding
 import com.example.whopaid.models.Group
 import com.example.whopaid.models.User
 import com.example.whopaid.repo.GroupRepository
+import com.example.whopaid.service.LocationService
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
@@ -56,37 +59,24 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
         binding.btnDeleteGroup.setOnClickListener { confirmAndDelete() }
         binding.btnLeaveGroup.setOnClickListener { leaveGroup() }
         binding.btnViewExpenses.setOnClickListener {
-            val intent = android.content.Intent(this, com.example.whopaid.ui.expenses.ExpensesActivity::class.java)
+            val intent = Intent(this, com.example.whopaid.ui.expenses.ExpensesActivity::class.java)
             intent.putExtra("groupId", groupId)
             startActivity(intent)
         }
 
-        // --- Generate QR in same page ---
-        binding.btnShowQr.setOnClickListener {
-            val group = currentGroup
-            val gid = group?.id
+        // --- QR generation ---
+        binding.btnShowQr.setOnClickListener { generateQrForGroup() }
 
-            if (gid == null) {
-                Toast.makeText(this, "Grupul nu este încă încărcat, încearcă din nou.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+        // --- Share Location ---
+        binding.btnShareLocation.setOnClickListener {
+            startLocationService()
+        }
 
-            val payload = group.qrPayload ?: "JOIN_GROUP:$gid"
-
-            if (group.qrPayload == null) {
-                val updates = mapOf("qrPayload" to payload)
-                db.collection("groups").document(gid)
-                    .update(updates)
-                    .addOnSuccessListener {
-                        group.qrPayload = payload
-                        showQrInView(payload)
-                    }
-                    .addOnFailureListener { e ->
-                        Toast.makeText(this, "Eroare salvare QR: ${e.message}", Toast.LENGTH_LONG).show()
-                    }
-            } else {
-                showQrInView(payload)
-            }
+        // --- Open Live Map ---
+        binding.btnOpenMap.setOnClickListener {
+            val intent = Intent(this, GroupMapActivity::class.java)
+            intent.putExtra("groupId", groupId)
+            startActivity(intent)
         }
 
         // Load group and listen for real-time updates
@@ -118,6 +108,8 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
         binding.btnDeleteGroup.visibility = if (isAdmin) View.VISIBLE else View.GONE
         binding.btnShowQr.visibility = if (isAdmin) View.VISIBLE else View.GONE
         binding.btnLeaveGroup.visibility = if (isAdmin) View.GONE else View.VISIBLE
+        binding.btnShareLocation.visibility = if (current != null) View.VISIBLE else View.GONE
+        binding.btnOpenMap.visibility = if (group.members.isNotEmpty()) View.VISIBLE else View.GONE
 
         // Load members
         if (group.members.isEmpty()) {
@@ -137,8 +129,8 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
     }
 
     private fun showAddMemberDialog() {
-        val view = LayoutInflater.from(this).inflate(com.example.whopaid.R.layout.dialog_add_member, null)
-        val edit = view.findViewById<EditText>(com.example.whopaid.R.id.etMemberEmail)
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_add_member, null)
+        val edit = view.findViewById<EditText>(R.id.etMemberEmail)
         AlertDialog.Builder(this)
             .setTitle("Add member by email")
             .setView(view)
@@ -234,6 +226,28 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
     }
 
     // --- QR generation & display ---
+    private fun generateQrForGroup() {
+        val group = currentGroup ?: return
+        val gid = group.id ?: return
+
+        val payload = group.qrPayload ?: "JOIN_GROUP:$gid"
+
+        if (group.qrPayload == null) {
+            val updates = mapOf("qrPayload" to payload)
+            db.collection("groups").document(gid)
+                .update(updates)
+                .addOnSuccessListener {
+                    group.qrPayload = payload
+                    showQrInView(payload)
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Eroare salvare QR: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+        } else {
+            showQrInView(payload)
+        }
+    }
+
     private fun generateQrBitmap(text: String, width: Int = 800, height: Int = 800): Bitmap? {
         return try {
             val hints = Hashtable<EncodeHintType, Any>()
@@ -261,7 +275,6 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
         }
     }
 
-
     private fun showQrInView(payload: String) {
         binding.progressQr.visibility = View.VISIBLE
         binding.imageGroupQr.visibility = View.GONE
@@ -275,5 +288,13 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
         } else {
             Toast.makeText(this, "Eroare generare QR", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    // --- Location Service ---
+    private fun startLocationService() {
+        val current = authRepo.currentUser() ?: return
+        val intent = Intent(this, LocationService::class.java)
+        startService(intent)
+        Toast.makeText(this, "Sharing location started", Toast.LENGTH_SHORT).show()
     }
 }

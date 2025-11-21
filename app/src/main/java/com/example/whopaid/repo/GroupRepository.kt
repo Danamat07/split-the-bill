@@ -104,4 +104,22 @@ class GroupRepository {
             Result.failure(e)
         }
     }
+
+    // --- NEW METHOD: obține grupul live (pentru update marker) ---
+    fun getGroupByIdLive(groupId: String, callback: (Group?) -> Unit) {
+        groupsCol.document(groupId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null || snapshot == null || !snapshot.exists()) {
+                    callback(null)
+                } else {
+                    callback(snapshot.toObject(Group::class.java))
+                }
+            }
+    }
+
+    // Optional: metoda suspend pentru a obține grupul o singură dată
+    suspend fun getGroupById(groupId: String): Group? {
+        val snapshot = groupsCol.document(groupId).get().await()
+        return snapshot.toObject(Group::class.java)
+    }
 }

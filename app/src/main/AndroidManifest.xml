@@ -2,9 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.whopaid">
 
-    <!-- Permisiuni -->
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <!-- CAMERA -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
+    <!-- LOCATION PERMISSIONS -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -16,24 +21,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WhoPaid">
 
-        <!-- Auth screens -->
-        <activity android:name="com.example.whopaid.ui.auth.RegisterActivity"/>
-        <activity android:name="com.example.whopaid.ui.auth.LoginActivity"/>
+        <!-- AUTH -->
+        <activity android:name="com.example.whopaid.ui.auth.RegisterActivity" />
+        <activity android:name="com.example.whopaid.ui.auth.LoginActivity" />
 
-        <!-- Groups screens -->
-        <activity android:name="com.example.whopaid.ui.groups.GroupsActivity"/>
-        <activity android:name="com.example.whopaid.ui.groups.CreateGroupActivity"/>
-        <activity android:name="com.example.whopaid.ui.groups.GroupDetailsActivity"/>
+        <!-- GROUPS -->
+        <activity android:name="com.example.whopaid.ui.groups.GroupsActivity" />
+        <activity android:name="com.example.whopaid.ui.groups.CreateGroupActivity" />
+        <activity android:name="com.example.whopaid.ui.groups.GroupDetailsActivity" />
+        <activity android:name="com.example.whopaid.ui.groups.ScanQrActivity" />
+        <activity android:name="com.example.whopaid.ui.groups.ShowGroupQrActivity" />
+        <activity android:name="com.example.whopaid.ui.groups.GroupMapActivity" />
 
-        <!-- Expenses screens -->
-        <activity android:name="com.example.whopaid.ui.expenses.ExpensesActivity"/>
-        <activity android:name="com.example.whopaid.ui.expenses.CreateExpenseActivity"/>
-        <activity android:name="com.example.whopaid.ui.expenses.BalanceActivity"/>
+        <!-- EXPENSES -->
+        <activity android:name="com.example.whopaid.ui.expenses.ExpensesActivity" />
+        <activity android:name="com.example.whopaid.ui.expenses.CreateExpenseActivity" />
+        <activity android:name="com.example.whopaid.ui.expenses.BalanceActivity" />
 
-        <!-- Scan QR / Camera -->
-        <activity android:name="com.example.whopaid.ui.groups.ScanQrActivity"/>
+        <!-- LOCATION SERVICE -->
+        <service android:name=".service.LocationService" android:exported="false"/>
 
-        <!-- Main launcher -->
+        <!-- MAIN -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -46,8 +54,5 @@
         </activity>
 
     </application>
-
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
 </manifest>
