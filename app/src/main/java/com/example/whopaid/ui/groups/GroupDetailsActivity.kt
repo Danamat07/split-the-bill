@@ -63,14 +63,14 @@ class GroupDetailsActivity : AppCompatActivity(), MemberAdapter.OnMemberLongClic
         }
 
         // NEW: open live map
-        binding.btnLiveMap.setOnClickListener {
+        binding.fabLiveMap.setOnClickListener {
             val intent = Intent(this, GroupMapActivity::class.java)
             intent.putExtra("groupId", groupId)
             startActivity(intent)
         }
 
         // NEW: open location settings
-        binding.btnLocationSettings.setOnClickListener {
+        binding.fabLocationSettings.setOnClickListener {
             val intent = Intent(this, LocationSettingsActivity::class.java)
             intent.putExtra("groupId", groupId)
             startActivity(intent)

@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/textEmpty"
-        android:text="@string/no_balances_to_show"
+        android:text="No balances to show"
         android:visibility="gone"
         android:textAlignment="center"
         android:textSize="16sp"
@@ -20,16 +20,24 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+    <!-- NEW: Send reminders - sends one email per person who owes current user -->
+    <Button
+        android:id="@+id/btnSendReminders"
+        android:text="Send Reminders"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <Button
         android:id="@+id/btnDeleteSelected"
-        android:text="@string/hide_paid_settlements"
+        android:text="Hide Paid Settlements"
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/btnResetAll"
-        android:text="@string/reset_all_admin"
+        android:text="Reset All (Admin)"
         android:visibility="gone"
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
