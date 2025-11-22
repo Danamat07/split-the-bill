@@ -1,169 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="16dp"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:padding="16dp">
 
-        <!-- Group name -->
-        <TextView
-            android:id="@+id/tvGroupName"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#2D1B3D"
-            android:layout_marginBottom="4dp"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
 
-        <!-- Group description -->
-        <TextView
-            android:id="@+id/tvDescription"
-            android:layout_marginTop="4dp"
-            android:textColor="#2D1B3D"
-            android:textSize="16sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <!-- Group name -->
+            <TextView
+                android:id="@+id/tvGroupName"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#2D1B3D"
+                android:layout_marginBottom="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <!-- Members label -->
-        <TextView
-            android:text="@string/members"
-            android:layout_marginTop="16dp"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:textColor="#2D1B3D"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <!-- Group description -->
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_marginTop="4dp"
+                android:textColor="#2D1B3D"
+                android:textSize="16sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <!-- Members list -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerMembers"
-            android:layout_marginTop="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <!-- Members label -->
+            <TextView
+                android:text="@string/members"
+                android:layout_marginTop="16dp"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="#2D1B3D"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <!-- View Expenses button (visible for all members) -->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnViewExpenses"
-            android:text="View Expenses"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/button_background"
-            android:paddingTop="14dp"
-            android:paddingBottom="14dp"
-            android:layout_marginTop="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <!-- Members list -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerMembers"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <!-- NEW: Live Map button -->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnLiveMap"
-            android:text="View Live Map"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/button_background"
-            android:paddingTop="14dp"
-            android:paddingBottom="14dp"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <!-- View Expenses button -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnViewExpenses"
+                android:text="View Expenses"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/button_background"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <!-- NEW: Location Settings -->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnLocationSettings"
-            android:text="Location Settings"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/button_background"
-            android:paddingTop="14dp"
-            android:paddingBottom="14dp"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <!-- Admin-only: Add member -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnAddMember"
+                android:text="@string/add_member_admin_only"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/button_background"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <!-- Admin-only: Add member -->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnAddMember"
-            android:text="@string/add_member_admin_only"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/button_background"
-            android:paddingTop="14dp"
-            android:paddingBottom="14dp"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <!-- QR code & Leave/Delete buttons remain unchanged -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnShowQr"
+                android:text="Generate QR for Group"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/button_background"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <!-- NEW: Generate QR code (admin only) -->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnShowQr"
-            android:text="Generate QR for Group"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/button_background"
-            android:paddingTop="14dp"
-            android:paddingBottom="14dp"
-            android:layout_marginTop="10dp"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnLeaveGroup"
+                android:text="@string/leave_group"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/button_background"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <!-- Leave group (non-admin only) -->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnLeaveGroup"
-            android:text="@string/leave_group"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/button_background"
-            android:paddingTop="14dp"
-            android:paddingBottom="14dp"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnDeleteGroup"
+                android:text="@string/delete_group_admin_only"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/button_background"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <!-- Delete group (admin-only) -->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnDeleteGroup"
-            android:text="@string/delete_group_admin_only"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/button_background"
-            android:paddingTop="14dp"
-            android:paddingBottom="14dp"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <!-- Loading indicators -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <!-- Loading indicator -->
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:visibility="gone"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/imageGroupQr"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                android:layout_gravity="center"/>
 
-        <!-- QR Image -->
-        <ImageView
-            android:id="@+id/imageGroupQr"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_marginTop="16dp"
-            android:visibility="gone"
-            android:layout_gravity="center"/>
+            <ProgressBar
+                android:id="@+id/progressQr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"/>
 
-        <!-- Loading indicator for QR -->
-        <ProgressBar
-            android:id="@+id/progressQr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:visibility="gone"/>
+        </LinearLayout>
+    </ScrollView>
 
-    </LinearLayout>
-</ScrollView>
+    <!-- FloatingActionButton: Location Settings (bottom start) -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabLocationSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="16dp"
+        android:contentDescription="Location Settings"
+        android:src="@android:drawable/ic_menu_manage"
+        android:backgroundTint="@color/button_purple"
+        android:tint="#FFFFFF" />
+
+    <!-- FloatingActionButton: View Live Map (bottom end) -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabLiveMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="View Live Map"
+        android:src="@android:drawable/ic_dialog_map"
+        android:backgroundTint="@color/button_purple"
+        android:tint="#FFFFFF" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
