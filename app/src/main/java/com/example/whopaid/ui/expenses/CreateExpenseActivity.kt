@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
  * - Converts the entered amount to RON (group standard currency).
  * - Any group member can create, edit, or delete an expense.
  */
+
 class CreateExpenseActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCreateExpenseBinding
@@ -36,7 +37,12 @@ class CreateExpenseActivity : AppCompatActivity() {
     private var membersMap = mutableMapOf<String, String>() // name -> uid
     private var selectedParticipants = mutableListOf<String>()
     private var currentPayerUid: String? = null
-    private var allCurrencies: List<String> = listOf("RON", "EUR", "USD", "GBP") // fallback
+
+    // fallback list to prevent crash
+    private var allCurrencies: List<String> = listOf("RON", "EUR", "USD", "GBP")
+    private var currenciesLoaded = false
+    private var expenseLoaded = false
+    private var loadedExpenseData: Expense? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,10 +55,7 @@ class CreateExpenseActivity : AppCompatActivity() {
             finish(); return
         }
 
-        // Step 1: Load currencies (async)
         setupCurrencySpinner()
-
-        // Step 2: Load members and, if editing, existing expense
         loadMembers {
             if (expenseId != null) loadExistingExpense()
         }
@@ -62,120 +65,140 @@ class CreateExpenseActivity : AppCompatActivity() {
     }
 
     /**
-     * Loads all available currencies from ExchangeRate-API.
+     * Loads currencies from API safely.
      */
     private fun setupCurrencySpinner() {
         val loadingAdapter = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_dropdown_item,
-            listOf("Loading currencies...")
+            listOf("Loading...")
         )
         binding.spinnerCurrency.adapter = loadingAdapter
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                allCurrencies = CurrencyService.getAvailableCurrencies()
+                val fetched = CurrencyService.getAvailableCurrencies()
+                if (fetched.isNotEmpty()) {
+                    allCurrencies = fetched
+                }
+
                 val adapter = ArrayAdapter(
                     this@CreateExpenseActivity,
                     android.R.layout.simple_spinner_dropdown_item,
                     allCurrencies
                 )
                 binding.spinnerCurrency.adapter = adapter
+
                 val ronIndex = allCurrencies.indexOf("RON")
                 if (ronIndex >= 0) binding.spinnerCurrency.setSelection(ronIndex)
 
-                // If we are in edit mode and expense already fetched earlier (or will be),
-                // ensure spinner gets updated to the expense currency.
-                // Attempt to (re)load existing expense to sync UI (safe to call twice).
-                if (expenseId != null) {
-                    loadExistingExpense()
-                }
+                currenciesLoaded = true
+                syncExpenseUI()
+
             } catch (e: Exception) {
-                Toast.makeText(
-                    this@CreateExpenseActivity,
-                    "Currency list failed: ${e.message}",
-                    Toast.LENGTH_LONG
-                ).show()
                 val fallbackAdapter = ArrayAdapter(
                     this@CreateExpenseActivity,
                     android.R.layout.simple_spinner_dropdown_item,
                     allCurrencies
                 )
                 binding.spinnerCurrency.adapter = fallbackAdapter
+
+                currenciesLoaded = true
+                syncExpenseUI()
             }
         }
     }
 
-
     /**
-     * Loads group members to populate payer spinner.
+     * Loads group members.
      */
     private fun loadMembers(onLoaded: (() -> Unit)? = null) {
         val gid = groupId ?: return
         db.collection("groups").document(gid).get().addOnSuccessListener { g ->
             val memberIds = g.get("members") as? List<String> ?: return@addOnSuccessListener
+
             db.collection("users").whereIn("__name__", memberIds).get()
                 .addOnSuccessListener { users ->
                     val names = mutableListOf<String>()
                     membersMap.clear()
+
                     for (doc in users.documents) {
                         val name = doc.getString("name") ?: doc.getString("email") ?: "Unknown"
-                        membersMap[name] = doc.id
                         names.add(name)
+                        membersMap[name] = doc.id
                     }
+
                     val adapter = ArrayAdapter(
                         this,
                         android.R.layout.simple_spinner_dropdown_item,
                         names
                     )
                     binding.spinnerPayer.adapter = adapter
-                    currentPayerUid?.let { uid ->
-                        val payerName = membersMap.entries.find { it.value == uid }?.key
-                        if (payerName != null) {
-                            val index = names.indexOf(payerName)
-                            if (index >= 0) binding.spinnerPayer.setSelection(index)
-                        }
-                    }
+
+                    syncExpenseUI()
+
                     onLoaded?.invoke()
                 }
         }
     }
 
     /**
-     * Loads existing expense (for editing mode).
+     * Loads existing expense for editing.
      */
     private fun loadExistingExpense() {
         val gid = groupId ?: return
         val eid = expenseId ?: return
+
         binding.progressBar.visibility = View.VISIBLE
+
         db.collection("groups").document(gid)
             .collection("expenses").document(eid)
             .get().addOnSuccessListener { doc ->
                 binding.progressBar.visibility = View.GONE
+
                 val exp = doc.toObject(Expense::class.java) ?: return@addOnSuccessListener
-                binding.etTitle.setText(exp.title)
-                binding.etAmount.setText(exp.amountRaw.toString())
-                selectedParticipants = exp.participants.toMutableList()
-                currentPayerUid = exp.payerUid
+                loadedExpenseData = exp
+                expenseLoaded = true
 
-                // Set payer spinner if members already loaded
-                if (membersMap.isNotEmpty()) {
-                    val payerName = membersMap.entries.find { it.value == exp.payerUid }?.key
-                    if (payerName != null) {
-                        val names = membersMap.keys.toList()
-                        val index = names.indexOf(payerName)
-                        if (index >= 0) binding.spinnerPayer.setSelection(index)
-                    }
-                }
-
-                // Set currency spinner
-                val curIndex = allCurrencies.indexOf(exp.currencyCode)
-                if (curIndex >= 0) binding.spinnerCurrency.setSelection(curIndex)
+                syncExpenseUI()
             }
     }
 
     /**
-     * Show dialog with checkboxes for group members → choose participants.
+     * Synchronizes UI only when resources are ready.
+     */
+    private fun syncExpenseUI() {
+        if (!expenseLoaded) return
+
+        val exp = loadedExpenseData ?: return
+
+        // Title + Amount
+        binding.etTitle.setText(exp.title)
+        binding.etAmount.setText(exp.amountRaw.toString())
+        selectedParticipants = exp.participants.toMutableList()
+        currentPayerUid = exp.payerUid
+
+        // Currency spinner
+        if (currenciesLoaded) {
+            val curIndex = allCurrencies.indexOf(exp.currencyCode)
+            if (curIndex >= 0) {
+                binding.spinnerCurrency.setSelection(curIndex)
+            }
+        }
+
+        // Payer spinner
+        if (membersMap.isNotEmpty()) {
+            val payerName = membersMap.entries.find { it.value == exp.payerUid }?.key
+            if (payerName != null) {
+                val names = membersMap.keys.toList()
+                val index = names.indexOf(payerName)
+                if (index >= 0) binding.spinnerPayer.setSelection(index)
+            }
+        }
+    }
+
+    /**
+     * Participant selection dialog.
      */
     private fun showParticipantDialog() {
         val container = LinearLayout(this)
@@ -198,29 +221,27 @@ class CreateExpenseActivity : AppCompatActivity() {
                 checkboxes.forEach { (name, cb) ->
                     if (cb.isChecked) membersMap[name]?.let { selectedParticipants.add(it) }
                 }
-                Toast.makeText(
-                    this,
-                    "Selected ${selectedParticipants.size} participants",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
             .setNegativeButton("Cancel", null)
             .show()
     }
 
     /**
-     * Creates or updates an expense, with currency conversion via ExchangeRate-API.
+     * Save expense (new or update).
      */
     private fun saveExpense() {
         val gid = groupId ?: return
         val title = binding.etTitle.text.toString().trim()
         val amountStr = binding.etAmount.text.toString().trim()
-        val payerName = binding.spinnerPayer.selectedItem?.toString()
         val currencyCode = binding.spinnerCurrency.selectedItem?.toString() ?: "RON"
 
+        val payerName = binding.spinnerPayer.selectedItem?.toString()
+
         if (title.isEmpty() || amountStr.isEmpty() || payerName == null) {
-            Toast.makeText(this, "Fill all fields", Toast.LENGTH_SHORT).show(); return
+            Toast.makeText(this, "Fill all fields", Toast.LENGTH_SHORT).show()
+            return
         }
+
         val amountRaw = amountStr.toDoubleOrNull()
         if (amountRaw == null || amountRaw <= 0) {
             Toast.makeText(this, "Invalid amount", Toast.LENGTH_SHORT).show(); return
@@ -228,16 +249,17 @@ class CreateExpenseActivity : AppCompatActivity() {
 
         val payerUid = membersMap[payerName] ?: return
         currentPayerUid = payerUid
+
         if (selectedParticipants.isEmpty()) {
             Toast.makeText(this, "Select at least one participant", Toast.LENGTH_SHORT).show()
             return
         }
 
         binding.progressBar.visibility = View.VISIBLE
+
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                // Convert to RON using ExchangeRate-API
-                val convertedAmount = if (currencyCode == "RON") {
+                val converted = if (currencyCode == "RON") {
                     amountRaw
                 } else {
                     CurrencyService.convert(amountRaw, currencyCode, "RON")
@@ -248,7 +270,7 @@ class CreateExpenseActivity : AppCompatActivity() {
                     title = title,
                     amountRaw = amountRaw,
                     currencyCode = currencyCode,
-                    amountInGroupCurrency = convertedAmount,
+                    amountInGroupCurrency = converted,
                     payerUid = payerUid,
                     participants = selectedParticipants,
                     createdAt = System.currentTimeMillis()
@@ -261,9 +283,9 @@ class CreateExpenseActivity : AppCompatActivity() {
                 }
 
                 binding.progressBar.visibility = View.GONE
+
                 if (result.isSuccess) {
-                    Toast.makeText(this@CreateExpenseActivity, "Expense saved", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(this@CreateExpenseActivity, "Expense saved", Toast.LENGTH_SHORT).show()
                     finish()
                 } else {
                     Toast.makeText(
@@ -272,6 +294,7 @@ class CreateExpenseActivity : AppCompatActivity() {
                         Toast.LENGTH_LONG
                     ).show()
                 }
+
             } catch (e: Exception) {
                 binding.progressBar.visibility = View.GONE
                 Toast.makeText(
