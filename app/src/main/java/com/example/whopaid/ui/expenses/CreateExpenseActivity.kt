@@ -83,6 +83,13 @@ class CreateExpenseActivity : AppCompatActivity() {
                 binding.spinnerCurrency.adapter = adapter
                 val ronIndex = allCurrencies.indexOf("RON")
                 if (ronIndex >= 0) binding.spinnerCurrency.setSelection(ronIndex)
+
+                // If we are in edit mode and expense already fetched earlier (or will be),
+                // ensure spinner gets updated to the expense currency.
+                // Attempt to (re)load existing expense to sync UI (safe to call twice).
+                if (expenseId != null) {
+                    loadExistingExpense()
+                }
             } catch (e: Exception) {
                 Toast.makeText(
                     this@CreateExpenseActivity,
@@ -98,6 +105,7 @@ class CreateExpenseActivity : AppCompatActivity() {
             }
         }
     }
+
 
     /**
      * Loads group members to populate payer spinner.
