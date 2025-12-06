@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:padding="12dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_activity">
 
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:id="@+id/barcodeScanner"
@@ -22,7 +23,9 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Start Camera Scan" />
+            android:text="Start Camera Scan"
+            android:textColor="#2F0C33"
+            android:backgroundTint="#E75CB4" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnFromGallery"
@@ -30,6 +33,8 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="From Gallery" />
+            android:text="From Gallery"
+            android:textColor="#2F0C33"
+            android:backgroundTint="#E75CB4" />
     </LinearLayout>
 </LinearLayout>
