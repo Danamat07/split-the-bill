@@ -4,12 +4,16 @@
     android:padding="16dp"
     android:gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_activity">>
+
 
     <TextView
         android:id="@+id/textTitle"
-        android:text="QR pentru grup"
-        android:textSize="18sp"
+        android:text="Group QR"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#FBBD40"
         android:layout_marginBottom="12dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
@@ -38,5 +42,6 @@
         android:text="Share payload"
         android:layout_marginTop="16dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FBBD40" />
 </LinearLayout>

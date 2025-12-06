@@ -4,13 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_activity">
 
     <TextView
         android:id="@+id/tvTitle"
         android:text="Location Sharing"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:textColor="#2F0C33"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,6 +24,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:backgroundTint="#FBBD40"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

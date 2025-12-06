@@ -3,13 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="@drawable/gradient_background"
+    android:background="@drawable/background_activity"
     android:padding="16dp">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <!-- PAGE TITLE -->
+        <TextView
+            android:id="@+id/tvPageTitle"
+            android:text="New Expense"
+            android:textStyle="bold"
+            android:textColor="#2F0C33"
+            android:textSize="28sp"
+            android:layout_marginBottom="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <!-- Expense title -->
         <EditText
@@ -43,7 +54,8 @@
         <TextView
             android:text="Currency"
             android:textStyle="bold"
-            android:textColor="#2D1B3D"
+            android:textColor="#2F0C33"
+            android:textSize="18sp"
             android:layout_marginTop="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -59,7 +71,8 @@
         <TextView
             android:text="Paid by"
             android:textStyle="bold"
-            android:textColor="#2D1B3D"
+            android:textColor="#2F0C33"
+            android:textSize="18sp"
             android:layout_marginTop="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -77,7 +90,7 @@
             android:text="@string/select_participants"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:background="@drawable/button_background"
+            android:backgroundTint="#FBBD40"
             android:minHeight="48dp"
             android:paddingTop="14dp"
             android:paddingBottom="14dp"
@@ -91,7 +104,7 @@
             android:text="@string/save_expense"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:background="@drawable/button_background"
+            android:backgroundTint="#FBBD40"
             android:minHeight="48dp"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
