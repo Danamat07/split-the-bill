@@ -45,7 +45,6 @@ class BalanceActivity : AppCompatActivity() {
     private var settlementsListener: ListenerRegistration? = null
     private var lastSettledKeys = setOf<String>() // used to update checkboxes dynamically
 
-    // TODO: Replace these constants with your EmailJS credentials (or keep in secure config)
     private val EMAILJS_SERVICE_ID = "service_cnrayl8"
     private val EMAILJS_TEMPLATE_ID = "template_9cs13e2"
     private val EMAILJS_USER_ID = "jAJjHgTpqlrtw7F52"
@@ -68,7 +67,6 @@ class BalanceActivity : AppCompatActivity() {
         binding.btnDeleteSelected.setOnClickListener { removeSettled() }
         binding.btnResetAll.setOnClickListener { confirmResetAll() }
 
-        // NEW: Send reminders button - sends mail to each person who owes current user
         binding.btnSendReminders.setOnClickListener { sendReminders() }
 
         loadBalances()
@@ -76,7 +74,7 @@ class BalanceActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        // Stop real-time listener when activity is destroyed
+        // stop real-time listener when activity is destroyed
         settlementsListener?.remove()
     }
 
@@ -140,7 +138,6 @@ class BalanceActivity : AppCompatActivity() {
                 binding.btnResetAll.visibility = if (isAdmin) View.VISIBLE else View.GONE
 
                 // Save locally the emails map so sendReminders can use it
-                // (store in a property)
                 cachedNames = names
                 cachedEmails = emails
                 cachedGroupName = groupSnap.getString("name") ?: "Group"
@@ -188,7 +185,6 @@ class BalanceActivity : AppCompatActivity() {
                 val key = "${e.id}_${p}_${e.payerUid}"
 
                 if (p == currentUid) {
-                    // Current user owes payer
                     temp.add(
                         BalanceItem(
                             id = key,
@@ -203,7 +199,6 @@ class BalanceActivity : AppCompatActivity() {
                         )
                     )
                 } else if (e.payerUid == currentUid) {
-                    // Someone owes current user
                     temp.add(
                         BalanceItem(
                             id = key,
